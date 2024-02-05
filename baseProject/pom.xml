@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.baseProject</groupId>
-	<artifactId>baseProject</artifactId>
+	<artifactId>cafofo_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>baseProject</name>
-	<description>Base project with spring security</description>
+	<description>Cafofo: Real estate marketplace and database</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
