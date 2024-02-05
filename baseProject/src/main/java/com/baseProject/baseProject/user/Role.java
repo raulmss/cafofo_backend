@@ -1,6 +1,8 @@
 package com.baseProject.baseProject.user;
 
 public enum Role {
-    USER,
+    CUSTOMER,
+    OWNER,
     ADMIN
+
 }

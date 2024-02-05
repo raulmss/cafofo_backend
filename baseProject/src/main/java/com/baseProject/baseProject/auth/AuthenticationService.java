@@ -21,14 +21,55 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse registerOwner(RegisterRequest request) {
         //Build the new user
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getFirstName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(Role.OWNER)
+                .build();
+        //Save the new user
+        userRepository.save(user);
+
+        //Generate the user's Token
+        var jwtToken = jwtService.generateToken(user);
+
+        //Return the authentication response containing the JWT Token.
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+
+    public AuthenticationResponse registerCustomer(RegisterRequest request) {
+        //Build the new user
+        var user = User.builder()
+                .firstname(request.getFirstName())
+                .lastname(request.getFirstName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.CUSTOMER)
+                .build();
+        //Save the new user
+        userRepository.save(user);
+
+        //Generate the user's Token
+        var jwtToken = jwtService.generateToken(user);
+
+        //Return the authentication response containing the JWT Token.
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
+        //Build the new user
+        var user = User.builder()
+                .firstname(request.getFirstName())
+                .lastname(request.getFirstName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ADMIN)
                 .build();
         //Save the new user
         userRepository.save(user);
