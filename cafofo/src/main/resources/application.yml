@@ -1,22 +1,22 @@
-
 spring:
+  application:
+    name: cafofo_backend
   datasource:
-    url: jdbc:mysql://localhost:3306/lab3b
-    username: root
-    password: garfo010203!
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1
+    url: jdbc:postgresql://localhost:5432/cafofo_backend_db
+    username: postgres
   jpa:
     hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      ddl-auto: create
-    show-sql: false
+      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-
-#logging:
-#  level:
-#    root: ERROR
-#    org:
-#      springframework: ERROR
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+  sql:
+    init:
+      mode: always
+server:
+  port: 8080
