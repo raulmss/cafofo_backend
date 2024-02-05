@@ -1,4 +1,4 @@
-package com.baseProject.baseProject;
+package com.baseProject.cafofo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

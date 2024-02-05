@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.user;
+package com.baseProject.cafofo.user;
 
 
 import jakarta.persistence.*;

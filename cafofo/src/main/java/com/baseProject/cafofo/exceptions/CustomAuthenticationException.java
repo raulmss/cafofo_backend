@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.exceptions;
+package com.baseProject.cafofo.exceptions;
 
 public class CustomAuthenticationException extends RuntimeException {
     public CustomAuthenticationException(String message, Throwable cause) {

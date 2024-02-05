@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.auth;
+package com.baseProject.cafofo.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

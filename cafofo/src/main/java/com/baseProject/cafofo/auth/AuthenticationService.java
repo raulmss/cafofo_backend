@@ -1,11 +1,11 @@
-package com.baseProject.baseProject.auth;
+package com.baseProject.cafofo.auth;
 
-import com.baseProject.baseProject.config.JwtService;
-import com.baseProject.baseProject.exceptions.CustomAuthenticationException;
-import com.baseProject.baseProject.exceptions.UserNotFoundException;
-import com.baseProject.baseProject.user.Role;
-import com.baseProject.baseProject.user.User;
-import com.baseProject.baseProject.user.UserRepository;
+import com.baseProject.cafofo.config.JwtService;
+import com.baseProject.cafofo.exceptions.CustomAuthenticationException;
+import com.baseProject.cafofo.exceptions.UserNotFoundException;
+import com.baseProject.cafofo.user.Role;
+import com.baseProject.cafofo.user.User;
+import com.baseProject.cafofo.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

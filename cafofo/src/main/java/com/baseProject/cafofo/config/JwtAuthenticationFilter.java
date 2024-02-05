@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.config;
+package com.baseProject.cafofo.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

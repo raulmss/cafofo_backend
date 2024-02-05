@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.exceptions;
+package com.baseProject.cafofo.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

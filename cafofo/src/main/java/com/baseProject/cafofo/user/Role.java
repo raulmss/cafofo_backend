@@ -1,4 +1,4 @@
-package com.baseProject.baseProject.user;
+package com.baseProject.cafofo.user;
 
 public enum Role {
     CUSTOMER,
