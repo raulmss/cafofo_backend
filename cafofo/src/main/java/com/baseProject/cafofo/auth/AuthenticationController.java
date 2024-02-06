@@ -1,6 +1,8 @@
 package com.baseProject.cafofo.auth;
 
+import com.baseProject.cafofo.exceptions.UsernameAlreadyInUseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,24 +18,34 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register-owner")
-    public ResponseEntity<AuthenticationResponse> registerOwner(
-            @RequestBody RegisterRequest request){
-
-        return ResponseEntity.ok(authenticationService.registerOwner(request));
+    public ResponseEntity<?> registerOwner(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(authenticationService.registerOwner(request));
+        } catch (UsernameAlreadyInUseException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use");
+        }
     }
     @PostMapping("/register-customer")
-    public ResponseEntity<AuthenticationResponse> registerCustomer(
+    public ResponseEntity<?> registerCustomer(
             @RequestBody RegisterRequest request){
 
-        return ResponseEntity.ok(authenticationService.registerCustomer(request));
+        try {
+            return ResponseEntity.ok(authenticationService.registerCustomer(request));
+        } catch (UsernameAlreadyInUseException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use");
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/register-admin")
-    public ResponseEntity<AuthenticationResponse> registerAdmin(
-            @RequestBody RegisterRequest request){
+    public ResponseEntity<?> registerAdmin(
+            @RequestBody RegisterRequest request) {
 
-        return ResponseEntity.ok(authenticationService.registerAdmin(request));
+        try {
+            return ResponseEntity.ok(authenticationService.registerAdmin(request));
+        } catch (UsernameAlreadyInUseException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use");
+        }
     }
 
     @PostMapping("/authenticate")
