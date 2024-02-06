@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -20,10 +21,10 @@ public class Owner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private User User;
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Collection<Property> properties;
+    private Collection<Property> properties= new ArrayList<>();
 
 }

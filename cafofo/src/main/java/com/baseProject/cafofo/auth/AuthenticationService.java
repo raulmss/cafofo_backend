@@ -1,8 +1,12 @@
 package com.baseProject.cafofo.auth;
 
 import com.baseProject.cafofo.config.JwtService;
+import com.baseProject.cafofo.entity.Customer;
+import com.baseProject.cafofo.entity.Owner;
 import com.baseProject.cafofo.exceptions.CustomAuthenticationException;
 import com.baseProject.cafofo.exceptions.UserNotFoundException;
+import com.baseProject.cafofo.repositoy.CustomerRepository;
+import com.baseProject.cafofo.repositoy.OwnerRepository;
 import com.baseProject.cafofo.user.Role;
 import com.baseProject.cafofo.user.User;
 import com.baseProject.cafofo.user.UserRepository;
@@ -17,6 +21,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final OwnerRepository ownerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -30,8 +36,12 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.OWNER)
                 .build();
+
+        var owner = Owner.builder()
+                .user(user)
+                .build();
         //Save the new user
-        userRepository.save(user);
+        ownerRepository.save(owner);
 
         //Generate the user's Token
         var jwtToken = jwtService.generateToken(user);
@@ -51,11 +61,15 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.CUSTOMER)
                 .build();
+
+        var customer = Customer.builder()
+                .user(user)
+                .build();
         //Save the new user
-        userRepository.save(user);
+        customerRepository.save(customer);
 
         //Generate the user's Token
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(customer.getUser());
 
         //Return the authentication response containing the JWT Token.
         return AuthenticationResponse.builder()
