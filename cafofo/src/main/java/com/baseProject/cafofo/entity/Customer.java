@@ -1,6 +1,7 @@
 package com.baseProject.cafofo.entity;
 
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Customer {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @JsonManagedReference
     private Collection<Offer> offers;
 
     @ManyToMany
