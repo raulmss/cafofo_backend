@@ -5,6 +5,7 @@ import com.baseProject.cafofo.entity.Customer;
 import com.baseProject.cafofo.entity.Owner;
 import com.baseProject.cafofo.exceptions.CustomAuthenticationException;
 import com.baseProject.cafofo.exceptions.UserNotFoundException;
+import com.baseProject.cafofo.exceptions.UsernameAlreadyInUseException;
 import com.baseProject.cafofo.repositoy.CustomerRepository;
 import com.baseProject.cafofo.repositoy.OwnerRepository;
 import com.baseProject.cafofo.user.Role;
@@ -27,13 +28,17 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registerOwner(RegisterRequest request) {
+    public AuthenticationResponse registerOwner(RegisterRequest request) throws UsernameAlreadyInUseException {
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new UsernameAlreadyInUseException("The email: " + request.getEmail() + " is already in use.");
+        }
         //Build the new user
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getFirstName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
                 .role(Role.OWNER)
                 .build();
 
@@ -52,13 +57,18 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse registerCustomer(RegisterRequest request) {
+    public AuthenticationResponse registerCustomer(RegisterRequest request) throws UsernameAlreadyInUseException {
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new UsernameAlreadyInUseException("The email: " + request.getEmail() + " is already in use.");
+        }
+
         //Build the new user
         var user = User.builder()
                 .firstname(request.getFirstName())
-                .lastname(request.getFirstName())
+                .lastname(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
                 .role(Role.CUSTOMER)
                 .build();
 
@@ -76,13 +86,17 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    public AuthenticationResponse registerAdmin(RegisterRequest request) {
+    public AuthenticationResponse registerAdmin(RegisterRequest request) throws UsernameAlreadyInUseException {
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new UsernameAlreadyInUseException("The email: " + request.getEmail() + " is already in use.");
+        }
         //Build the new user
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getFirstName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
                 .role(Role.ADMIN)
                 .build();
         //Save the new user
