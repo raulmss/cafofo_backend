@@ -5,7 +5,7 @@ INSERT INTO _user ( id, firstname, lastname, email, password, role) VALUES
                                                                    (3, 'Bob', 'Johnson', 'bob.johnson@example.com', 'hashed_password_3', 'CUSTOMER');
 
 INSERT INTO _user ( id, firstname, lastname, email, password, role) VALUES
-                                                                    (4, 'Owner John', 'Doe', 'john.doe@example.com', 'hashed_password_1@gmail.com', 'CUSTOMER'),
+                                                                    (4, 'Owner John', 'Doe', 'htet.hsumin@gmail.com', 'hashed_password_1@gmail.com', 'CUSTOMER'),
                                                                     (5,'Owner Jane', 'Smith', 'jane.smith@example.com', 'hashed_password_2', 'CUSTOMER'),
                                                                     (6,'Owner Bob', 'Johnson', 'bob.johnson@example.com', 'hashed_password_3', 'CUSTOMER');
 -- Insert data into customer table

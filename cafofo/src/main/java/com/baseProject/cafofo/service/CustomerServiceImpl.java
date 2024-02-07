@@ -29,6 +29,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final ModelMapper modelMapper;
 
+    private final EmailService emailService;
+
     @Override
     public String addToFavorites(Long userId, Long propertyId) {
         Customer customer = getCustomer(userId);
@@ -96,11 +98,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String cancelOffer(Long offerId, Long userId) {
-
         offerValidation(offerId, userId);
+        emailToOwner(offerId, userId);
         customerRepository.cancelOffer(offerId, userId);
         return "Offer canceled successfully.";
-
     }
 
     @Override
@@ -121,6 +122,18 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CafofoApplicationException("Offer not found.");
         }
 
+    }
+    private void emailToOwner(Long offerId, Long userId){
+
+        // Get customer and owner email addresses
+        String ownerEmail=customerRepository.getOwnerEmail( offerId,  userId);
+        Offer offer = customerRepository.checkOffer(userId, offerId);
+
+        // Send email to owner
+        String ownerSubject = "New Offer Received";
+        String ownerBody = "Dear Owner, a new offer(Offer Price:"+offer.getOfferPrice()+"has been received for your property.(Property ID: "+offer.getProperty().getId() +"Name;"+offer.getProperty().getPropertyName()+").";
+
+        emailService.sendEmail(ownerEmail, ownerSubject, ownerBody);
     }
 
 }
