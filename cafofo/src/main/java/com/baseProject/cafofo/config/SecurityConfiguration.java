@@ -20,6 +20,7 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     //In this class we bind all the Authentification Config together, incluinding filters.
 
+    String[] offerRoles = {"CUSTOMER","ADMIN"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.
@@ -28,6 +29,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .requestMatchers("/api/v1/auth/**","api/v1/customers/**")
                 .permitAll()
+                .requestMatchers("/api/v1/offers/**").permitAll()
+                .requestMatchers("/api/v1/**").permitAll()
+                //.hasAnyAuthority(offerRoles)
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -32,5 +32,4 @@ public class PropertyDto {
     private Boolean approvalStatus;
     private PropertyStatus propertyStatus;
 
-
 }

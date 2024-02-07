@@ -35,6 +35,7 @@ public class Offer {
     @JsonBackReference
     private Property property;
 
+    private Double offerPrice;
     private boolean cancel_flag;
 
 }

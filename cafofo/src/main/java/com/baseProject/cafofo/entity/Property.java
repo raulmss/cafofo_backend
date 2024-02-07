@@ -55,6 +55,7 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
+
     @Column(name = "feature")
     private String factAndFeatures;
 
@@ -68,6 +69,7 @@ public class Property {
 
     @Column(name = "area")
     private Double area;
+
 
     @Column(name = "approvalstatus")
     private Boolean approvalStatus = false;
@@ -93,5 +95,4 @@ public class Property {
 
         return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
     }
-
 }

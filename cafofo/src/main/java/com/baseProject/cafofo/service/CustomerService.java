@@ -2,10 +2,13 @@ package com.baseProject.cafofo.service;
 
 import com.baseProject.cafofo.DTO.FavouriteDto;
 import com.baseProject.cafofo.entity.Offer;
+import com.baseProject.cafofo.dto.OfferRequestDto;
 
 import java.util.List;
 
 public interface CustomerService {
+  
+    void save(Long customerId, OfferRequestDto offerRequest);
 
     String addToFavorites(Long userId, Long propertyId);
 

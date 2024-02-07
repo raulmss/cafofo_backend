@@ -1,16 +1,14 @@
 package com.baseProject.cafofo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.baseProject.cafofo.entity.Property;
 
 import java.util.Collection;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OwnerDto {
     private Long id;
+
     private UserDto User;
+
+    private Collection<Property> properties;
 
 }

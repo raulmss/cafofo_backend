@@ -17,5 +17,4 @@ public interface PropertyRepo extends JpaRepository<Property, Long> {
     @Query("Select p from Property p join p.owner o where o.id= :ownerId")
     public List<Property> findAllPropertyByOwner(Long ownerId);
 
-
 }

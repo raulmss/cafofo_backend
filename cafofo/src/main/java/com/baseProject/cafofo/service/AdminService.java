@@ -1,52 +1,28 @@
 package com.baseProject.cafofo.service;
 
-import com.baseProject.cafofo.exceptions.UserNotFoundException;
-import com.baseProject.cafofo.user.User;
-import com.baseProject.cafofo.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.baseProject.cafofo.dto.CustomerDto;
+import com.baseProject.cafofo.dto.OfferRequest;
+import com.baseProject.cafofo.dto.UserDto;
+
+import java.util.Collection;
+
+public interface AdminService {
 
 
-@Service
-@RequiredArgsConstructor
-public class AdminService {
+    Collection<UserDto> findAllCustomers();
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    Collection<UserDto> findAllOwners();
 
+    void updateCustomer(Long customerId);
 
-    public String resetUserPassword(long userId, String newPassword) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    void updateOwner(Long ownerId);
 
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-
-        return "Password changed successfully";
-    }
-
-    public String userChangeUserPassword(String email, String answer, String newPassword){
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        if (passwordEncoder.matches(answer, user.getSecretAnswer())){
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
-            return "Password changed successfully";
-        }
-        return "Something went wrong, please try again later.";
-    }
-
-    public String changeActiveStatus(long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        user.setActive(!user.isActive());
-        userRepository.save(user);
-
-        return user.isActive()? "User is now active" : "User is now inactive";
-    }
-
-
+    void approveProperty(Long propertyId);
+  
+    String resetUserPassword(long userId, String newPassword);
+  
+    String userChangeUserPassword(String email, String answer, String newPassword);
+  
+    String changeActiveStatus(long userId);
+  
 }
