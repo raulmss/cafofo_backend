@@ -1,6 +1,9 @@
 package com.baseProject.cafofo.entity;
 
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +26,7 @@ public class Customer {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @JsonManagedReference
     private Collection<Offer> offers;
 
     @ManyToMany
@@ -31,6 +35,7 @@ public class Customer {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "property_id")
     )
+    @JsonManagedReference
     private Collection<Property> favoriteProperties;
 
 }

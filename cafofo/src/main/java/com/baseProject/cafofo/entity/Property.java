@@ -4,12 +4,15 @@ import com.baseProject.cafofo.entity.Address;
 import com.baseProject.cafofo.entity.DealType;
 import com.baseProject.cafofo.entity.HomeType;
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,12 +32,16 @@ public class Property {
     private String propertyName;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Collection<PropImage> image;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
+    @JsonManagedReference
     private Collection<Offer> offers;
 
     @ManyToOne
+    @JoinColumn(name = "owner_id")
+    @JsonBackReference
     private Owner owner;
 
     @OneToOne
@@ -50,10 +57,9 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
-    @ElementCollection
-    @CollectionTable(name = "fact_and_features", joinColumns = @JoinColumn(name = "property_id"))
+    //List to String
     @Column(name = "feature")
-    private List<String> factAndFeatures;
+    private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "home_type")
@@ -65,4 +71,5 @@ public class Property {
 
     @Column(name = "area")
     private Double area;
+
 }

@@ -1,5 +1,6 @@
 package com.baseProject.cafofo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,15 +19,21 @@ public class Offer {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
     private OfferStatus offerStatus;
 
+    private double offerPrice;
+
     private LocalDateTime offerDate;
 
     @ManyToOne
     @JoinColumn(name = "property_id")
+    @JsonBackReference
     private Property property;
+
+    private boolean cancel_flag;
 
 }
