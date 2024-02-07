@@ -1,5 +1,6 @@
 package com.baseProject.cafofo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Offer {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
@@ -27,6 +29,9 @@ public class Offer {
 
     @ManyToOne
     @JoinColumn(name = "property_id")
+    @JsonBackReference
     private Property property;
+
+    private Double offerPrice;
 
 }

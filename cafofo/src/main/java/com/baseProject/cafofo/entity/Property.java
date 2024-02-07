@@ -4,6 +4,8 @@ import com.baseProject.cafofo.entity.Address;
 import com.baseProject.cafofo.entity.DealType;
 import com.baseProject.cafofo.entity.HomeType;
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +34,11 @@ public class Property {
     private Collection<PropImage> image;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
+    @JsonManagedReference
     private Collection<Offer> offers;
 
     @ManyToOne
+    @JsonBackReference
     private Owner owner;
 
     @OneToOne
@@ -50,10 +54,7 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
-    @ElementCollection
-    @CollectionTable(name = "fact_and_features", joinColumns = @JoinColumn(name = "property_id"))
-    @Column(name = "feature")
-    private List<String> factAndFeatures;
+    private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "home_type")
@@ -65,4 +66,29 @@ public class Property {
 
     @Column(name = "area")
     private Double area;
+
+    @Column(name="approvalstatus")
+    private Boolean approvalStatus = false;
+
+    @Transient
+    private PropertyStatus propertyStatus;
+
+
+    public PropertyStatus getPropertyStatus() {
+        if (offers == null || offers.isEmpty()) {
+            return PropertyStatus.AVAILABLE;
+        }
+
+        boolean hasPending = false;
+
+        for (Offer offer : offers) {
+            if(offer.getOfferStatus() == OfferStatus.ACCEPTED){
+                return PropertyStatus.CONTINGENT;
+            }else if(offer.getOfferStatus() == OfferStatus.PENDING){
+                hasPending = true;
+            }
+        }
+
+        return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
+    }
 }
