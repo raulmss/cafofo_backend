@@ -11,6 +11,7 @@ import com.baseProject.cafofo.repositoy.OwnerRepository;
 import com.baseProject.cafofo.user.Role;
 import com.baseProject.cafofo.user.User;
 import com.baseProject.cafofo.user.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,36 +22,48 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
     private final UserRepository userRepository;
+
     private final CustomerRepository customerRepository;
     private final OwnerRepository ownerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    @PostConstruct
+    public void populate(){
+        var user = User.builder()
+                .firstname("Lorena")
+                .lastname("Souto")
+                .email("lorena@mail.com")
+                .password(passwordEncoder.encode("1234"))
+                .secretAnswer(passwordEncoder.encode("1234"))
+                .active(true)
+                .role(Role.ADMIN)
+                .build();
+        //Save the new user
+        userRepository.save(user);
+    }
+
     public AuthenticationResponse registerOwner(RegisterRequest request) throws UsernameAlreadyInUseException {
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new UsernameAlreadyInUseException("The email: " + request.getEmail() + " is already in use.");
         }
         //Build the new user
-        var user = User.builder()
-                .firstname(request.getFirstName())
-                .lastname(request.getFirstName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
-                .active(true)
-                .role(Role.OWNER)
-                .build();
+        Owner owner = new Owner();
+                owner.setFirstname(request.getFirstName());
+                owner.setLastname(request.getFirstName());
+                owner.setEmail(request.getEmail());
+                owner.setPassword(passwordEncoder.encode(request.getPassword()));
+                owner.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
+                owner.setActive(true);
+                owner.setRole(Role.OWNER);
 
-        var owner = Owner.builder()
-                .user(user)
-                .build();
-        //Save the new user
         ownerRepository.save(owner);
 
         //Generate the user's Token
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(owner);
 
         //Return the authentication response containing the JWT Token.
         return AuthenticationResponse.builder()
@@ -64,24 +77,20 @@ public class AuthenticationService {
         }
 
         //Build the new user
-        var user = User.builder()
-                .firstname(request.getFirstName())
-                .lastname(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
-                .active(true)
-                .role(Role.CUSTOMER)
-                .build();
+       Customer customer = new Customer();
+        customer.setFirstname(request.getFirstName());
+        customer.setLastname(request.getFirstName());
+        customer.setEmail(request.getEmail());
+        customer.setPassword(passwordEncoder.encode(request.getPassword()));
+        customer.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
+        customer.setActive(true);
+        customer.setRole(Role.CUSTOMER);
 
-        var customer = Customer.builder()
-                .user(user)
-                .build();
         //Save the new user
         customerRepository.save(customer);
 
         //Generate the user's Token
-        var jwtToken = jwtService.generateToken(customer.getUser());
+        var jwtToken = jwtService.generateToken(customer);
 
         //Return the authentication response containing the JWT Token.
         return AuthenticationResponse.builder()

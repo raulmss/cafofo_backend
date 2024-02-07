@@ -13,15 +13,11 @@ import java.util.Collection;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class Customer {
+public class Customer extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private Collection<Offer> offers;
