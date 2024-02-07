@@ -37,7 +37,7 @@ public class OwnerPropertySearchDao {
         Root<Owner> rootOwner = criteriaQuery.from(Owner.class);
 
 
-        Join<Object, Object> ownerProperty = rootProperty.join("owner_id", JoinType.INNER);
+        Join<Property, Owner> ownerProperty = rootProperty.join("owner", JoinType.INNER);
 
         if(ownerPropertyCriteriaRequest.getOwnerId() != null)
             predicates.add(criteriaBuilder.equal(ownerProperty.getParent().get("id"),ownerPropertyCriteriaRequest.getOwnerId()));
@@ -61,14 +61,13 @@ public class OwnerPropertySearchDao {
             predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), ownerPropertyCriteriaRequest.getNumBed()));
 
         if(ownerPropertyCriteriaRequest.getNumBath() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBath"), ownerPropertyCriteriaRequest.getNumBath()));
+            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBathRoom"), ownerPropertyCriteriaRequest.getNumBath()));
 
-
-        if(ownerPropertyCriteriaRequest.getNumBed() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), ownerPropertyCriteriaRequest.getNumBed()));
+        if(ownerPropertyCriteriaRequest.getHomeType() != null)
+            predicates.add(criteriaBuilder.equal(rootProperty.get("homeType"), ownerPropertyCriteriaRequest.getHomeType()));
 
         if(ownerPropertyCriteriaRequest.getFactAndFactory() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("factAndFactory"), ownerPropertyCriteriaRequest.getFactAndFactory()));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower( rootProperty.get("factAndFeatures")), "%"+ownerPropertyCriteriaRequest.getFactAndFactory().toLowerCase()+"%"));
 
         criteriaQuery.where(criteriaBuilder.and((Predicate[]) predicates.toArray(new Predicate[0])));
         criteriaQuery.select(rootProperty).distinct(true);

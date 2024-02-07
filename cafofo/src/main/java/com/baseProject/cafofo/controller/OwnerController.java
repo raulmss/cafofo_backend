@@ -1,11 +1,13 @@
 package com.baseProject.cafofo.controller;
 
 import com.baseProject.cafofo.dto.PropertyDto;
+import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/owners")
@@ -21,7 +23,7 @@ public class OwnerController {
     }
 
     @GetMapping("/{ownerid}/filter")
-    public Collection<PropertyDto> searchEqualProperty(
+    public List<Property> searchEqualProperty(
             @PathVariable("ownerid") Long ownerid,
             @RequestParam(value ="dealtype", required = false) String dealType,
             @RequestParam(value ="minprice", required = false) Double minPrice,

@@ -18,7 +18,10 @@ public interface PropertyService {
 
     public void delete(Long propertyId);
 
-    Collection<PropertyDto> searchMinMaxProperty(String dealType, Double minPrice, Double maxPrice, Double numBed, Double numBath, String homeType, Double minArea, Double maxArea, String factAndFactory);
+    List<Property> searchMinMaxProperty(String dealType, Double minPrice, Double maxPrice, Double numBed, Double numBath, String homeType, Double minArea, Double maxArea, String factAndFactory);
 
 
+    Collection<PropertyDto> findPropertyByCustomer();
+
+    PropertyDto findPropertyByCustomer(Long propid);
 }

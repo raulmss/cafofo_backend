@@ -5,6 +5,7 @@ import com.baseProject.cafofo.dto.PropertyCriteriaRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.entity.PropImage;
 import com.baseProject.cafofo.entity.Property;
+import com.baseProject.cafofo.entity.PropertyStatus;
 import com.baseProject.cafofo.help.ListMapper;
 import com.baseProject.cafofo.repo.PropImageRepo;
 import com.baseProject.cafofo.repo.PropertyMinMaxSearchDao;
@@ -35,13 +36,36 @@ public class PropertyServiceImpl implements PropertyService {
     PropertyMinMaxSearchDao propertyMinMaxSearchDao;
 
     public Collection<PropertyDto> findAll(Long ownerid){
-        return listMapper.mapList(propertyRepo.findAllPropertyByOwner(ownerid), new PropertyDto());
+        Collection<Property> properties = propertyRepo.findAllPropertyByOwner(ownerid);
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Property property : properties) {
+            PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            if(property.getApprovalStatus() != false){
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            }
+            else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+
+            propertyDtos.add(propertyDto);
+        }
+        return propertyDtos;
     }
 
     public PropertyDto findAllById(Long ownerId,Long propertyId){
         ModelMapper modelMapper = new ModelMapper();
+        Property property = propertyRepo.findPropertyByOwnerEquals(ownerId,propertyId);
+        PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
+        System.out.println("<<>>"+ property.getApprovalStatus());;
+        if(property.getApprovalStatus() == false){
+            propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+        }
+        else {
+            propertyDto.setPropertyStatus(property.getPropertyStatus());
+        }
         System.out.println("service "+ propertyId);
-        return modelMapper.map(propertyRepo.findPropertyByOwnerEquals(ownerId,propertyId),PropertyDto.class);
+        return propertyDto;
     }
 @Transactional
     public void save(PropertyDto p){
@@ -52,6 +76,7 @@ public class PropertyServiceImpl implements PropertyService {
             System.out.println(i.getPath());
         }
         p.setImage(imageList);
+        p.setApprovalStatus(false);
 
         ModelMapper modelMapper = new ModelMapper();
         Property property = modelMapper.map(p,Property.class);
@@ -70,19 +95,20 @@ public class PropertyServiceImpl implements PropertyService {
         }
 
     }
-
     public void delete(Long propertyId){
         Property p =propertyRepo.findById(propertyId).get();
         System.out.println("delete...");
+        System.out.println(propertyRepo.findPropertyByOffers(propertyId) +"<<>>");
         if(p != null){
-           if (propertyRepo.findPropertyByOffers(propertyId) == 0){
+           if (propertyRepo.findPropertyByOffers(propertyId) ==null){
+
                propertyRepo.delete(p);
            }
         }
     }
 
     @Override
-    public Collection<PropertyDto> searchMinMaxProperty(String dealType, Double minPrice, Double maxPrice,
+    public List<Property> searchMinMaxProperty(String dealType, Double minPrice, Double maxPrice,
                                                   Double numBed, Double numBath, String homeType,
                                                   Double minArea, Double maxArea, String factAndFactory) {
         PropertyCriteriaRequest propertyCriteriaRequest = new PropertyCriteriaRequest();
@@ -96,7 +122,42 @@ public class PropertyServiceImpl implements PropertyService {
         propertyCriteriaRequest.setMinArea(minArea);
         propertyCriteriaRequest.setMaxArea(maxArea);
 
-        return listMapper.mapList(propertyMinMaxSearchDao.findAllByCriteria(propertyCriteriaRequest),PropertyDto.class) ;
+        return propertyMinMaxSearchDao.findAllByCriteria(propertyCriteriaRequest) ;
+    }
+
+    @Override
+    public Collection<PropertyDto> findPropertyByCustomer() {
+        Collection<Property> properties = propertyRepo.findAll();
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Property property : properties) {
+            PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            if(property.getApprovalStatus() != false){
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            }
+            else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+
+            propertyDtos.add(propertyDto);
+        }
+        return propertyDtos;
+    }
+
+    @Override
+    public PropertyDto findPropertyByCustomer(Long propid) {
+        ModelMapper modelMapper = new ModelMapper();
+        Property property = propertyRepo.findById(propid).get();
+        PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
+        System.out.println("<<>>"+ property.getApprovalStatus());;
+        if(property.getApprovalStatus() == false){
+            propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+        }
+        else {
+            propertyDto.setPropertyStatus(property.getPropertyStatus());
+        }
+        System.out.println("service "+ propid);
+        return propertyDto;
     }
 
 

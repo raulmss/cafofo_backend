@@ -2,6 +2,7 @@ package com.baseProject.cafofo.service.impl;
 
 import com.baseProject.cafofo.dto.OwnerPropertyCriteriaRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
+import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.help.ListMapper;
 import com.baseProject.cafofo.repo.OwnerPropertySearchDao;
 import com.baseProject.cafofo.repo.OwnerRepo;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class OwnerServiceImpl implements OwnerService {
@@ -29,10 +31,10 @@ public class OwnerServiceImpl implements OwnerService {
     }
     @Transactional
     @Override
-    public Collection<PropertyDto> searchOwnerMinMaxProperty(Long ownerId, String dealType, Double minPrice,
-                                                             Double maxPrice, Double numBed, Double numBath,
-                                                             String homeType, Double minArea, Double maxArea,
-                                                             String factAndFactory) {
+    public List<Property> searchOwnerMinMaxProperty(Long ownerId, String dealType, Double minPrice,
+                                                    Double maxPrice, Double numBed, Double numBath,
+                                                    String homeType, Double minArea, Double maxArea,
+                                                    String factAndFactory) {
         OwnerPropertyCriteriaRequest ownerPropertyCriteriaRequest = new OwnerPropertyCriteriaRequest();
 
         ownerPropertyCriteriaRequest.setDealType (dealType);
@@ -45,7 +47,6 @@ public class OwnerServiceImpl implements OwnerService {
         ownerPropertyCriteriaRequest.setMinArea(minArea);
         ownerPropertyCriteriaRequest.setMaxArea(maxArea);
         ownerPropertyCriteriaRequest.setOwnerId(ownerId);
-        return listMapper.mapList(ownerPropertySearchDao.findAllByCriteria(ownerPropertyCriteriaRequest),
-                PropertyDto.class) ;
+        return ownerPropertySearchDao.findAllByCriteria(ownerPropertyCriteriaRequest) ;
     }
 }

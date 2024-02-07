@@ -1,6 +1,7 @@
 package com.baseProject.cafofo.service;
 
 import com.baseProject.cafofo.dto.PropertyDto;
+import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.help.ListMapper;
 import com.baseProject.cafofo.repo.OwnerRepo;
 import com.baseProject.cafofo.service.impl.OwnerServiceImpl;
@@ -16,7 +17,7 @@ public interface OwnerService{
     public Collection<PropertyDto> getOwnerPropertiesByPlaced(Long ownerId);
 
 
-    Collection<PropertyDto> searchOwnerMinMaxProperty(Long ownerId, String dealType, Double minPrice, Double maxPrice,
-                                                      Double numBed, Double numBath, String homeType,
-                                                      Double minArea, Double maxArea, String factAndFactory);
+    List<Property> searchOwnerMinMaxProperty(Long ownerId, String dealType, Double minPrice, Double maxPrice,
+                                             Double numBed, Double numBath, String homeType,
+                                             Double minArea, Double maxArea, String factAndFactory);
 }

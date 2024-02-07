@@ -30,6 +30,7 @@ public class PropertyDto {
     private DealType dealType;
     private Double area;
     private Boolean approvalStatus;
+    private PropertyStatus propertyStatus;
 
 
 }

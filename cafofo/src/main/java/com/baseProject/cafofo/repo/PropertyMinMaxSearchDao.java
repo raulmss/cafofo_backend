@@ -24,6 +24,8 @@ public class PropertyMinMaxSearchDao {
 
         Root<Property> rootProperty = criteriaQuery.from(Property.class);
 
+        predicates.add(criteriaBuilder.equal(rootProperty.get("approvalStatus"), true));
+
         if(propertyCriteriaRequest.getDealType() != null)
             predicates.add(criteriaBuilder.equal(rootProperty.get("dealType"), propertyCriteriaRequest.getDealType()));
 
@@ -43,14 +45,14 @@ public class PropertyMinMaxSearchDao {
             predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), propertyCriteriaRequest.getNumBed()));
 
         if(propertyCriteriaRequest.getNumBath() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBath"), propertyCriteriaRequest.getNumBath()));
+            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBathRoom"), propertyCriteriaRequest.getNumBath()));
 
-
-        if(propertyCriteriaRequest.getNumBed() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), propertyCriteriaRequest.getNumBed()));
+        if(propertyCriteriaRequest.getHomeType() != null)
+            predicates.add(criteriaBuilder.equal(rootProperty.get("homeType"), propertyCriteriaRequest.getHomeType()));
 
         if(propertyCriteriaRequest.getFactAndFactory() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("factAndFactory"), propertyCriteriaRequest.getFactAndFactory()));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower( rootProperty.get("factAndFeatures")),
+                    "%"+propertyCriteriaRequest.getFactAndFactory().toLowerCase()+"%"));
 
         criteriaQuery.where(criteriaBuilder.and((Predicate[]) predicates.toArray(new Predicate[0])));
         criteriaQuery.select(rootProperty).distinct(true);

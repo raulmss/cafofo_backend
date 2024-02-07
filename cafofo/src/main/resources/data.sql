@@ -49,9 +49,9 @@ INSERT INTO public.address (city, country, number, state, street, zip)
 VALUES ('Dallas', 'United States', '101', 'TX', 'Main St', '75201');
 
 
-insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name) values (700.0,2,2,800.0,1,1,'FOR_RENT','APARTMENT','JoJoResident');
+insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus) values (700.0,2,2,800.0,1,1,'FOR_RENT','APARTMENT','JoJoResident',true);
 
-insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus) values (800.0,2,3,800000.0,2,1,'FOR_SALE','CONDO','Royal Oaks',false);
+insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus) values (800.0,2,3,800000.0,2,1,'FOR_SALE','CONDO','Royal Oaks',true);
 
 insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus) values (900.0,2,2,800.0,3,1,'SOLD','TOWNHOUSE','Emerald Paradise',false);
 

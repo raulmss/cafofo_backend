@@ -26,7 +26,7 @@ public class Owner {
     private User User;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    @JsonBackReference
+    @JsonManagedReference
     private Collection<Property> properties;
 
 }

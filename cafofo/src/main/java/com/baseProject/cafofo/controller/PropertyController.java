@@ -26,6 +26,18 @@ public class PropertyController {
     @Autowired
     PropertyService propertyService;
 
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<PropertyDto> findPropertyByCustomer(){
+        return propertyService.findPropertyByCustomer();
+    }
+
+    @GetMapping("/properities/{propid}")
+    @ResponseStatus(HttpStatus.OK)
+    public PropertyDto findPropertyByCustomer( @PathVariable("propid") Long propid){
+        return propertyService.findPropertyByCustomer(propid);
+    }
+
     @GetMapping("/owner/{ownerid}/properities")
     @ResponseStatus(HttpStatus.OK)
     public Collection<PropertyDto> findAll(@PathVariable("ownerid") Long ownerid){
@@ -90,7 +102,7 @@ public class PropertyController {
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<PropertyDto> searchEqualProperty(
+    public List<Property> searchEqualProperty(
         @RequestParam(value ="dealtype", required = false) String dealType,
         @RequestParam(value ="minprice", required = false) Double minPrice,
         @RequestParam(value ="maxprice", required = false) Double maxPrice,

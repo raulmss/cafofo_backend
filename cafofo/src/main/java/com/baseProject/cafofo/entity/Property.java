@@ -70,5 +70,27 @@ public class Property {
     @Column(name = "approvalstatus")
     private Boolean approvalStatus = false;
 
+    @Transient
+    private PropertyStatus propertyStatus;
+
+
+    public PropertyStatus getPropertyStatus() {
+        if (offers == null || offers.isEmpty()) {
+            return PropertyStatus.AVAILABLE;
+        }
+
+        boolean hasPending = false;
+
+        for (Offer offer : offers) {
+            if(offer.getOfferStatus() == OfferStatus.ACCEPTED){
+                return PropertyStatus.CONTINGENT;
+            }else if(offer.getOfferStatus() == OfferStatus.PENDING){
+                hasPending = true;
+            }
+        }
+
+        return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
+    }
+
 
 }
