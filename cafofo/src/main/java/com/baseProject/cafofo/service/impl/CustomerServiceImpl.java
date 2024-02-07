@@ -118,7 +118,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Offer> getOffersByUser(Long userId) {
-        return customerRepository.findOffersByCustomerId(userId);
+        List< Offer> offers=customerRepository.findOffersByCustomerId(userId);
+        if(offers.size()<=0){
+            throw new CafofoApplicationException("There is no Offer.");
+        }
+        else
+            return offers;
     }
 
     @Override
