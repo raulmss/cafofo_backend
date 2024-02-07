@@ -10,4 +10,5 @@ public class OwnerDto {
     private UserDto User;
 
     private Collection<Property> properties;
+
 }

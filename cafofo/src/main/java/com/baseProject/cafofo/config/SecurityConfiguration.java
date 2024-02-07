@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                  csrf().disable()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/api/v1/auth/**","api/v1/customers/**")
                 .permitAll()
                 .requestMatchers("/api/v1/offers/**").permitAll()
                 .requestMatchers("/api/v1/**").permitAll()

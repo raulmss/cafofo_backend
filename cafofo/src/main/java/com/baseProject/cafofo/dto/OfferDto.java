@@ -21,4 +21,5 @@ public class OfferDto {
     private LocalDateTime offerDate;
     private Double offerPrice;
     private Property property;
+
 }

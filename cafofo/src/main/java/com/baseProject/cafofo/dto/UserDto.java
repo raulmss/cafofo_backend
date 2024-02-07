@@ -1,5 +1,6 @@
 package com.baseProject.cafofo.dto;
 
+import com.baseProject.cafofo.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,7 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
+    private Role role;
 
 }

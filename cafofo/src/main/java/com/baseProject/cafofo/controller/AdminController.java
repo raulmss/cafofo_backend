@@ -1,23 +1,41 @@
 package com.baseProject.cafofo.controller;
 
+import com.baseProject.cafofo.entity.DTO.AdminChangesPasswordDTO;
+import com.baseProject.cafofo.service.AdminService;
+import jakarta.annotation.security.PermitAll;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import com.baseProject.cafofo.config.URLConstants;
 import com.baseProject.cafofo.dto.UserDto;
-import com.baseProject.cafofo.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @RestController
-@RequestMapping(URLConstants.ADMIN_ENDPOINTS)
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/v1/admin")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AdminController {
 
-    @Autowired
-    AdminService adminService;
+    private final AdminService adminService;
 
-    @GetMapping("/customers")
+    private final AdminService adminService;
+  
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> changeUserPassword(@RequestBody AdminChangesPasswordDTO acp) {
+        return ResponseEntity.ok(adminService.resetUserPassword(acp.getUserId(), acp.getNewPassword()));
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/change-activation-user/{id}")
+    public ResponseEntity<String> deactivateUser(@PathVariable long id) {
+        return ResponseEntity.ok(adminService.changeActiveStatus(id));
+    }
+
+   @GetMapping("/customers")
     Collection<UserDto> findAllCustomers(){
         System.out.println("inside findAllCustomers method controller");
         return adminService.findAllCustomers();
@@ -51,9 +69,4 @@ public class AdminController {
         System.out.println("inside approveProperty method controller");
         adminService.approveProperty(propertyId);
     }
-
-
-
-
-
 }

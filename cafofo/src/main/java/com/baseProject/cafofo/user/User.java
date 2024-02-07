@@ -19,17 +19,19 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String firstname;
     private String lastname;
     private String email;
     private String password;
-    private Boolean active = true;
+    private String secretAnswer;
+    private boolean active;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -67,6 +69,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }

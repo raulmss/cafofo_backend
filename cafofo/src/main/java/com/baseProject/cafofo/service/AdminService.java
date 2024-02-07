@@ -18,4 +18,11 @@ public interface AdminService {
     void updateOwner(Long ownerId);
 
     void approveProperty(Long propertyId);
+  
+    String resetUserPassword(long userId, String newPassword);
+  
+    String userChangeUserPassword(String email, String answer, String newPassword);
+  
+    String changeActiveStatus(long userId);
+  
 }

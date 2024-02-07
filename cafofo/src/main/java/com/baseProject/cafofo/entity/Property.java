@@ -7,11 +7,13 @@ import com.baseProject.cafofo.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,8 +23,6 @@ import java.util.List;
 @Builder
 @Data
 public class Property {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,17 +31,18 @@ public class Property {
     private String propertyName;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Collection<PropImage> image;
+    @JsonManagedReference
+    private Collection<PropImage> image = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
-    private Collection<Offer> offers;
+    private Collection<Offer> offers = new ArrayList<>();
 
     @ManyToOne
     @JsonBackReference
     private Owner owner;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -54,6 +55,8 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
+
+    @Column(name = "feature")
     private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
@@ -67,7 +70,8 @@ public class Property {
     @Column(name = "area")
     private Double area;
 
-    @Column(name="approvalstatus")
+
+    @Column(name = "approvalstatus")
     private Boolean approvalStatus = false;
 
     @Transient

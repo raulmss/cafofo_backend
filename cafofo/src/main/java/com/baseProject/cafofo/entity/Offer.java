@@ -25,13 +25,17 @@ public class Offer {
     @Enumerated(EnumType.STRING)
     private OfferStatus offerStatus;
 
+    private double offerPrice;
+
     private LocalDateTime offerDate;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "property_id")
     @JsonBackReference
     private Property property;
 
     private Double offerPrice;
+    private boolean cancel_flag;
 
 }

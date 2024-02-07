@@ -2,12 +2,12 @@ spring:
   application:
     name: cafofo_backend
   datasource:
-    password: 1
+    password: admin
     url: jdbc:postgresql://localhost:5432/cafofo_backend_db
     username: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -19,4 +19,5 @@ spring:
     init:
       mode: always
 server:
-  port: 8080
+  port: 8383
+
