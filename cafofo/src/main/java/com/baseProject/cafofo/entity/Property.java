@@ -37,7 +37,7 @@ public class Property {
     private Collection<Offer> offers;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     private Owner owner;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -8,13 +8,13 @@ import java.util.Collection;
 import java.util.List;
 
 public interface PropertyService {
-    public Collection<PropertyDto> findAll();
+    public Collection<PropertyDto> findAll(Long ownerid);
 
     public PropertyDto findAllById(Long ownerId,Long propertyId);
 
     public void save(PropertyDto p);
 
-    public PropertyDto update (Long propertyId,Property p);
+    public void update (Long propertyId,PropertyDto p);
 
     public void delete(Long propertyId);
 

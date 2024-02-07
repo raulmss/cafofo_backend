@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+
 public class PropertyServiceImpl implements PropertyService {
     @Autowired
     PropertyRepo propertyRepo;
@@ -34,8 +34,8 @@ public class PropertyServiceImpl implements PropertyService {
     @Autowired
     PropertyMinMaxSearchDao propertyMinMaxSearchDao;
 
-    public Collection<PropertyDto> findAll(){
-        return listMapper.mapList(propertyRepo.findAll(), new PropertyDto());
+    public Collection<PropertyDto> findAll(Long ownerid){
+        return listMapper.mapList(propertyRepo.findAllPropertyByOwner(ownerid), new PropertyDto());
     }
 
     public PropertyDto findAllById(Long ownerId,Long propertyId){
@@ -56,26 +56,26 @@ public class PropertyServiceImpl implements PropertyService {
         ModelMapper modelMapper = new ModelMapper();
         Property property = modelMapper.map(p,Property.class);
         propertyRepo.save(property);
-        //return modelMapper.map(propertyRepo.save(property),PropertyDto.class);
+
     }
 
-    public PropertyDto update (Long propertyId,Property p){
-        if(propertyRepo.findById(propertyId).get()!= null){
-            for(PropImage i: p.getImage()){
+    public void update (Long propertyId,PropertyDto p){
+        ModelMapper modelMapper = new ModelMapper();
+        Property property =propertyRepo.findById(propertyId).get();
+        if(property!= null){
+            for(PropImage i: property.getImage()){
                 propImageRepo.delete(i);
             }
-//            ModelMapper modelMapper = new ModelMapper();
-//            Property property = modelMapper.map(p,PropertyDto.class);
-            //return save(p);
-            return null;
+            save(p);
         }
-        return null;
+
     }
 
     public void delete(Long propertyId){
         Property p =propertyRepo.findById(propertyId).get();
+        System.out.println("delete...");
         if(p != null){
-           if (propertyRepo.findPropertyByOffers(propertyId) ==0){
+           if (propertyRepo.findPropertyByOffers(propertyId) == 0){
                propertyRepo.delete(p);
            }
         }
