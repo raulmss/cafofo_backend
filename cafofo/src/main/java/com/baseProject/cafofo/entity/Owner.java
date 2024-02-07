@@ -1,6 +1,8 @@
 package com.baseProject.cafofo.entity;
 
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,9 @@ public class Owner extends User{
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Collection<Property> properties= new ArrayList<>();
+
+    @JsonManagedReference
+    private Collection<Property> properties = new ArrayList<>();
+
 
 }

@@ -4,6 +4,8 @@ import com.baseProject.cafofo.entity.Address;
 import com.baseProject.cafofo.entity.DealType;
 import com.baseProject.cafofo.entity.HomeType;
 import com.baseProject.cafofo.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -21,8 +23,6 @@ import java.util.List;
 @Builder
 @Data
 public class Property {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,16 +31,19 @@ public class Property {
     private String propertyName;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Collection<PropImage> image = new ArrayList<>();
 
-    //Might change the fetchType when functions that use the getStatus are implemented
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property", fetch = FetchType.EAGER)
-    private Collection<Offer> offers = new ArrayList<>();
+    @JsonManagedReference
+    private Collection<PropImage> image = new ArrayList<>();;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
+    @JsonManagedReference
+    private Collection<Offer> offers = new ArrayList<>();;
 
     @ManyToOne
+    @JsonBackReference
     private Owner owner;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -53,10 +56,9 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
-    @ElementCollection
-    @CollectionTable(name = "fact_and_features", joinColumns = @JoinColumn(name = "property_id"))
     @Column(name = "feature")
-    private List<String> factAndFeatures = new ArrayList<>();
+
+    private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "home_type")
@@ -68,6 +70,9 @@ public class Property {
 
     @Column(name = "area")
     private Double area;
+
+    @Column(name = "approvalstatus")
+    private Boolean approvalStatus = false;
 
     @Transient
     private PropertyStatus propertyStatus;
@@ -90,4 +95,5 @@ public class Property {
 
         return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
     }
+
 }
