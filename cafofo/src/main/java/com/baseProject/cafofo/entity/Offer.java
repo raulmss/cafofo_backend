@@ -30,6 +30,7 @@ public class Offer {
     private LocalDateTime offerDate;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "property_id")
     @JsonBackReference
     private Property property;

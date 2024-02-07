@@ -16,4 +16,5 @@ public class CafofoApplication {
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
+
 }

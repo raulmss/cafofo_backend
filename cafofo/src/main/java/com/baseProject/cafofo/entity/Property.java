@@ -7,6 +7,7 @@ import com.baseProject.cafofo.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +23,6 @@ import java.util.List;
 @Builder
 @Data
 public class Property {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,18 +32,17 @@ public class Property {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Collection<PropImage> image;
+    private Collection<PropImage> image = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
-    private Collection<Offer> offers;
+    private Collection<Offer> offers = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
     @JsonBackReference
     private Owner owner;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -57,7 +55,6 @@ public class Property {
     @Column(name = "number_of_bathroom")
     private Integer numberOfBathRoom;
 
-    //List to String
     @Column(name = "feature")
     private String factAndFeatures;
 
@@ -71,5 +68,30 @@ public class Property {
 
     @Column(name = "area")
     private Double area;
+
+    @Column(name = "approvalstatus")
+    private Boolean approvalStatus = false;
+
+    @Transient
+    private PropertyStatus propertyStatus;
+
+
+    public PropertyStatus getPropertyStatus() {
+        if (offers == null || offers.isEmpty()) {
+            return PropertyStatus.AVAILABLE;
+        }
+
+        boolean hasPending = false;
+
+        for (Offer offer : offers) {
+            if(offer.getOfferStatus() == OfferStatus.ACCEPTED){
+                return PropertyStatus.CONTINGENT;
+            }else if(offer.getOfferStatus() == OfferStatus.PENDING){
+                hasPending = true;
+            }
+        }
+
+        return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
+    }
 
 }

@@ -9,25 +9,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Owner {
+public class Owner extends User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JsonManagedReference
-    private User User;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @JsonManagedReference
-    private Collection<Property> properties;
+    private Collection<Property> properties = new ArrayList<>();
 
 }
