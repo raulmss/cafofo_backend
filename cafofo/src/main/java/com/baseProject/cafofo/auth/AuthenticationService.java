@@ -6,8 +6,8 @@ import com.baseProject.cafofo.entity.Owner;
 import com.baseProject.cafofo.exceptions.CustomAuthenticationException;
 import com.baseProject.cafofo.exceptions.UserNotFoundException;
 import com.baseProject.cafofo.exceptions.UsernameAlreadyInUseException;
-import com.baseProject.cafofo.repositoy.CustomerRepository;
-import com.baseProject.cafofo.repositoy.OwnerRepository;
+import com.baseProject.cafofo.repo.CustomerRepo;
+import com.baseProject.cafofo.repo.OwnerRepo;
 import com.baseProject.cafofo.user.Role;
 import com.baseProject.cafofo.user.User;
 import com.baseProject.cafofo.user.UserRepository;
@@ -25,8 +25,8 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
 
-    private final CustomerRepository customerRepository;
-    private final OwnerRepository ownerRepository;
+    private final CustomerRepo customerRepository;
+    private final OwnerRepo ownerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;

@@ -1,30 +1,16 @@
 package com.baseProject.cafofo.controller;
 
-import com.baseProject.cafofo.config.URLConstants;
-import com.baseProject.cafofo.dto.OfferRequest;
+import com.baseProject.cafofo.dto.FavouriteDto;
 import com.baseProject.cafofo.dto.OfferRequestDto;
-import com.baseProject.cafofo.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequestMapping(URLConstants.CUSTOMER_ENDPOINTS)
-@CrossOrigin(origins = "http://localhost:3000")
-public class CustomerController {
-
-import com.baseProject.cafofo.DTO.FavouriteDto;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.baseProject.cafofo.config.URLConstants;
-import com.baseProject.cafofo.dto.OfferRequest;
-import com.baseProject.cafofo.dto.OfferRequestDto;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor

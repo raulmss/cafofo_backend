@@ -19,10 +19,6 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Owner extends User{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @JsonManagedReference
     private Collection<Property> properties = new ArrayList<>();

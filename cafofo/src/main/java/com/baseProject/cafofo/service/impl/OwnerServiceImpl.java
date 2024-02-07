@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import com.baseProject.cafofo.dto.OwnerPropertyCriteriaRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.entity.Property;
-import com.baseProject.cafofo.help.ListMapper;
+import com.baseProject.cafofo.helper.ListMapper;
 import com.baseProject.cafofo.repo.OwnerPropertySearchDao;
 import com.baseProject.cafofo.repo.OwnerRepo;
 import com.baseProject.cafofo.service.OwnerService;

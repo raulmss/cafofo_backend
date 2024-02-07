@@ -12,9 +12,5 @@ public class CafofoApplication {
 		SpringApplication.run(CafofoApplication.class, args);
 	}
 
-	@Bean
-	public ModelMapper modelMapper(){
-		return new ModelMapper();
-	}
 
 }

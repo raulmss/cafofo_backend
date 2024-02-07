@@ -1,6 +1,6 @@
 package com.baseProject.cafofo.service;
 
-import com.baseProject.cafofo.DTO.FavouriteDto;
+import com.baseProject.cafofo.dto.FavouriteDto;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.dto.OfferRequestDto;
 

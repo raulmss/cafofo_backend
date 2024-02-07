@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -32,10 +31,8 @@ public class Offer {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "property_id")
-    @JsonBackReference
     private Property property;
 
-    private Double offerPrice;
     private boolean cancel_flag;
 
 }

@@ -6,7 +6,7 @@ import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.entity.PropImage;
 import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.entity.PropertyStatus;
-import com.baseProject.cafofo.help.ListMapper;
+import com.baseProject.cafofo.helper.ListMapper;
 import com.baseProject.cafofo.repo.PropImageRepo;
 import com.baseProject.cafofo.repo.PropertyMinMaxSearchDao;
 import com.baseProject.cafofo.repo.PropertyRepo;
@@ -69,7 +69,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 @Transactional
     public void save(PropertyDto p){
-        List<ImageDto> imageList = new ArrayList<>();
+        Collection<ImageDto> imageList = new ArrayList<>();
         for(ImageDto i: p.getImage()){
             i.setPath("C:/PropertyPhoto/"+i.getPath());
             imageList.add(i);

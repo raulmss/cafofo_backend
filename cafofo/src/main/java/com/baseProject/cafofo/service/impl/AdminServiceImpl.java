@@ -15,6 +15,7 @@ import com.baseProject.cafofo.user.User;
 import com.baseProject.cafofo.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -35,6 +36,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     PropertyRepo propertyRepo;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     public Collection<UserDto> findAllCustomers(){
 
@@ -69,7 +77,40 @@ public class AdminServiceImpl implements AdminService {
         propertyRepo.save(property);
     }
 
+    @Override
+    public String resetUserPassword(long userId, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return "Password changed successfully";
+    }
+
+    @Override
+    public String userChangeUserPassword(String email, String answer, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (passwordEncoder.matches(answer, user.getSecretAnswer())){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return "Password changed successfully";
+        }
+        return "Something went wrong, please try again later.";
+    }
+
+    @Override
+    public String changeActiveStatus(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setActive(!user.isActive());
+        userRepository.save(user);
+
+        return user.isActive()? "User is now active" : "User is now inactive";
+    }
 
 
 }

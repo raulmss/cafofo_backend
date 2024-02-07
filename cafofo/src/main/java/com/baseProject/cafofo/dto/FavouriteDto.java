@@ -1,4 +1,4 @@
-package com.baseProject.cafofo.DTO;
+package com.baseProject.cafofo.dto;
 
 import com.baseProject.cafofo.entity.*;
 import lombok.AllArgsConstructor;

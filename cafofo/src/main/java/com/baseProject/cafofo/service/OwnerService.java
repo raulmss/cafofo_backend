@@ -5,7 +5,7 @@ import com.baseProject.cafofo.dto.OfferDto;
 import com.baseProject.cafofo.dto.OfferRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.entity.Property;
-import com.baseProject.cafofo.help.ListMapper;
+import com.baseProject.cafofo.helper.ListMapper;
 import com.baseProject.cafofo.repo.OwnerRepo;
 import com.baseProject.cafofo.service.impl.OwnerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

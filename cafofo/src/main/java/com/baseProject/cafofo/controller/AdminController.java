@@ -12,6 +12,8 @@ import com.baseProject.cafofo.config.URLConstants;
 import com.baseProject.cafofo.dto.UserDto;
 import org.springframework.http.HttpStatus;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
@@ -20,7 +22,6 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    private final AdminService adminService;
   
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/reset-password")
