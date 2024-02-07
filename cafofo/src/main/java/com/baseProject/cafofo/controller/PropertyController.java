@@ -6,6 +6,7 @@ import com.baseProject.cafofo.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,80 +22,35 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/properties")
 public class PropertyController {
     @Autowired
     PropertyService propertyService;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
     public Collection<PropertyDto> findPropertyByCustomer(){
         return propertyService.findPropertyByCustomer();
     }
 
-    @GetMapping("/properities/{propid}")
+    @GetMapping("/{propid}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
     public PropertyDto findPropertyByCustomer( @PathVariable("propid") Long propid){
         return propertyService.findPropertyByCustomer(propid);
     }
 
-    @GetMapping("/owner/{ownerid}/properities")
-    @ResponseStatus(HttpStatus.OK)
-    public Collection<PropertyDto> findAll(@PathVariable("ownerid") Long ownerid){
-        return propertyService.findAll(ownerid);
-    }
-
-    @GetMapping("/owner/{ownerid}/properities/{propid}")
-    @ResponseStatus(HttpStatus.OK)
-    public PropertyDto findById(@PathVariable("ownerid") Long ownerid, @PathVariable("propid") Long propid){
-        System.out.println("Controller "+ ownerid+" " +propid);
-        return propertyService.findAllById(ownerid,propid);
-    }
-    @PostMapping("/{ownerid}/upload")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<List<String>> uploadFiles(Long ownerid,@RequestParam("files") List<MultipartFile> multipartFiles){
-        List<String> filenames = new ArrayList<>();
-        System.out.println("before path");
-        // Create a Path object for the directory
-        Path directory = Paths.get("C:/PropertyPhoto/");
-        System.out.println("file uploadFiles method"+ directory);
-        try{
-            // Create directory if it does not exist
-            if (!Files.exists(directory)) {
-                Files.createDirectory(directory);
-            }
-            for(MultipartFile file : multipartFiles){
-                if(file.isEmpty()){
-                    System.out.println("File not found");
-                }
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                // Create a Path object for the destination file
-                Path destinationPath = Paths.get(directory.toString(), fileName);
-                // Copy file to destination
-                Files.copy(file.getInputStream(), destinationPath);
-                filenames.add(fileName);
-            }
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.ok().body(filenames);
-    }
-
-    @PostMapping("/{ownerId}/properties")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void save(Long ownerId,@RequestBody PropertyDto property){
-        System.out.println("Property Controller");
-         propertyService.save(property);
-    }
-
     @DeleteMapping("/{propertyId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
     public void delete(@PathVariable ("propertyId") Long propertyId){
         propertyService.delete(propertyId);
     }
 
     @PutMapping("/{propertyId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
     public void update(@PathVariable ("propertyId") Long propertyId, @RequestBody PropertyDto property){
         System.out.println("Controller update");
         propertyService.update(propertyId,property);
@@ -102,6 +58,8 @@ public class PropertyController {
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
+
     public List<Property> searchEqualProperty(
         @RequestParam(value ="dealtype", required = false) String dealType,
         @RequestParam(value ="minprice", required = false) Double minPrice,

@@ -9,9 +9,10 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import com.baseProject.cafofo.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
@@ -35,12 +36,12 @@ public class OwnerPropertySearchDao {
 
         Root<Property> rootProperty = criteriaQuery.from(Property.class);
         Root<Owner> rootOwner = criteriaQuery.from(Owner.class);
+        Root<User> rootUser = criteriaQuery.from(User.class);
 
-
-        Join<Property, Owner> ownerProperty = rootProperty.join("owner", JoinType.INNER);
+        Join<Owner, Property> ownerProperty = rootOwner.join("properties", JoinType.INNER);
 
         if(ownerPropertyCriteriaRequest.getOwnerId() != null)
-            predicates.add(criteriaBuilder.equal(ownerProperty.getParent().get("id"),ownerPropertyCriteriaRequest.getOwnerId()));
+            predicates.add(criteriaBuilder.equal(rootUser.get("id"),ownerPropertyCriteriaRequest.getOwnerId()));
 
         if(ownerPropertyCriteriaRequest.getDealType() != null)
             predicates.add(criteriaBuilder.equal(rootProperty.get("dealType"), ownerPropertyCriteriaRequest.getDealType()));
@@ -58,10 +59,10 @@ public class OwnerPropertySearchDao {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("price"), ownerPropertyCriteriaRequest.getMinPrice()));
 
         if(ownerPropertyCriteriaRequest.getNumBed() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), ownerPropertyCriteriaRequest.getNumBed()));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("numberOfBed"), ownerPropertyCriteriaRequest.getNumBed()));
 
         if(ownerPropertyCriteriaRequest.getNumBath() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBathRoom"), ownerPropertyCriteriaRequest.getNumBath()));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("numberOfBathRoom"), ownerPropertyCriteriaRequest.getNumBath()));
 
         if(ownerPropertyCriteriaRequest.getHomeType() != null)
             predicates.add(criteriaBuilder.equal(rootProperty.get("homeType"), ownerPropertyCriteriaRequest.getHomeType()));

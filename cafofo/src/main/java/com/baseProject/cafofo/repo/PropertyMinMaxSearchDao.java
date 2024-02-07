@@ -42,10 +42,10 @@ public class PropertyMinMaxSearchDao {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("price"), propertyCriteriaRequest.getMinPrice()));
 
         if(propertyCriteriaRequest.getNumBed() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBed"), propertyCriteriaRequest.getNumBed()));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("numberOfBed"), propertyCriteriaRequest.getNumBed()));
 
         if(propertyCriteriaRequest.getNumBath() != null)
-            predicates.add(criteriaBuilder.equal(rootProperty.get("numberOfBathRoom"), propertyCriteriaRequest.getNumBath()));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(rootProperty.get("numberOfBathRoom"), propertyCriteriaRequest.getNumBath()));
 
         if(propertyCriteriaRequest.getHomeType() != null)
             predicates.add(criteriaBuilder.equal(rootProperty.get("homeType"), propertyCriteriaRequest.getHomeType()));
