@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class OfferDto {
 
     private Long id;
-    private Customer customer;
+//    private CustomerDto customer;
     private OfferStatus offerStatus;
     private LocalDateTime offerDate;
     private Double offerPrice;
-    private Property property;
+
 
 }

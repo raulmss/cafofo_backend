@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
@@ -16,8 +17,8 @@ public class PropertyDto {
 
     private Long id;
     private String propertyName;
-    private Collection<ImageDto> image;
-    private Collection<OfferDto> offers;
+    private Collection<ImageDto> image = new ArrayList<>();
+    private Collection<OfferDto> offers= new ArrayList<>();
     private OwnerDto owner;
     private AddressDto address;
     private Double price;

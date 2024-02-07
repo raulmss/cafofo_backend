@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,7 +71,15 @@ public class OwnerServiceImpl implements OwnerService {
         ownerPropertyCriteriaRequest.setMinArea(minArea);
         ownerPropertyCriteriaRequest.setMaxArea(maxArea);
         ownerPropertyCriteriaRequest.setOwnerId(ownerId);
-        return ownerPropertySearchDao.findAllByCriteria(ownerPropertyCriteriaRequest) ;
+        List<Property> properties = new ArrayList<>();
+
+        for(Property p : ownerPropertySearchDao.findAllByCriteria(ownerPropertyCriteriaRequest)){
+            if(p.getOwner().getId() == ownerId){
+                properties.add(p);
+            }
+        }
+         return properties;
+
     }
   
       public Collection<OfferDto> findOffersByPropertiesId(Long ownerId, Long propertiesId){
