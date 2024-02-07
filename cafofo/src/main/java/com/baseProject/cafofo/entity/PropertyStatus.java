@@ -4,6 +4,5 @@ public enum PropertyStatus {
     AVAILABLE,
     PENDING,
     CONTINGENT,
-
     INITIAL
 }

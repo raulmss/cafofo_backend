@@ -7,11 +7,13 @@ import com.baseProject.cafofo.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,12 +31,13 @@ public class Property {
     private String propertyName;
 
     @OneToMany(cascade = CascadeType.ALL)
+
     @JsonManagedReference
-    private Collection<PropImage> image;
+    private Collection<PropImage> image = new ArrayList<>();;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
-    private Collection<Offer> offers;
+    private Collection<Offer> offers = new ArrayList<>();;
 
     @ManyToOne
     @JsonBackReference
@@ -54,6 +57,7 @@ public class Property {
     private Integer numberOfBathRoom;
 
     @Column(name = "feature")
+
     private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
@@ -91,6 +95,5 @@ public class Property {
 
         return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
     }
-
 
 }
