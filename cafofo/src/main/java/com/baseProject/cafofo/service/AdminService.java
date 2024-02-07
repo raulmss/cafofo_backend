@@ -37,5 +37,15 @@ public class AdminService {
         return "Password changed successfully";
     }
 
+    public String changeActiveStatus(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setActive(!user.isActive());
+        userRepository.save(user);
+
+        return user.isActive()? "User is now active" : "User is now inactive";
+    }
+
 
 }

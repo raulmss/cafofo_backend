@@ -39,6 +39,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
+                .active(true)
                 .role(Role.OWNER)
                 .build();
 
@@ -69,6 +70,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
+                .active(true)
                 .role(Role.CUSTOMER)
                 .build();
 
@@ -97,6 +99,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
+                .active(true)
                 .role(Role.ADMIN)
                 .build();
         //Save the new user
