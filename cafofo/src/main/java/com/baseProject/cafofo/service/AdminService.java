@@ -30,11 +30,22 @@ public class AdminService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        if (passwordEncoder.encode(user.getSecretAnswer()).equals(answer)){
+        if (passwordEncoder.matches(answer, user.getSecretAnswer())){
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
+            return "Password changed successfully";
         }
-        return "Password changed successfully";
+        return "Something went wrong, please try again later.";
+    }
+
+    public String changeActiveStatus(long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setActive(!user.isActive());
+        userRepository.save(user);
+
+        return user.isActive()? "User is now active" : "User is now inactive";
     }
 
 

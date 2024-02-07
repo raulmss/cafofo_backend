@@ -12,17 +12,13 @@ import java.util.Collection;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Owner {
+public class Owner extends User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Collection<Property> properties= new ArrayList<>();
