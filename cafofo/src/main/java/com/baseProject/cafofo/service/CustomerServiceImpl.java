@@ -2,7 +2,6 @@ package com.baseProject.cafofo.service;
 
 import com.baseProject.cafofo.DTO.FavouriteDto;
 import com.baseProject.cafofo.Repository.CustomerRepository;
-import com.baseProject.cafofo.Repository.OfferRepository;
 import com.baseProject.cafofo.Repository.PropertyRepository;
 import com.baseProject.cafofo.entity.Customer;
 import com.baseProject.cafofo.entity.Offer;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -84,7 +82,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private Customer getCustomer(Long userId) {
-        return customerRepository.findCustomerByUserId(userId);
+       // return customerRepository.findCustomerByUserId(userId);
+        return customerRepository.findById(userId).get();
     }
 
     private Property getProperty(Long propertyId) {
@@ -93,12 +92,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Offer> getOffersByUser(Long userId) {
-        return customerRepository.findOffersByUserId(userId);
+        return customerRepository.findOffersByCustomerId(userId);
     }
 
     @Override
     public String cancelOffer(Long offerId, Long userId) {
         offerValidation(offerId, userId);
+        //email send
         emailToOwner(offerId, userId);
         customerRepository.cancelOffer(offerId, userId);
         return "Offer canceled successfully.";
