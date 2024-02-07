@@ -23,9 +23,7 @@ public class Owner extends User{
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-
     @JsonManagedReference
     private Collection<Property> properties = new ArrayList<>();
-
 
 }

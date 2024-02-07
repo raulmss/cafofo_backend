@@ -13,7 +13,7 @@ public class CafofoApplication {
 	}
 
 	@Bean
-	public ModelMapper getModelMapper(){
+	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
 

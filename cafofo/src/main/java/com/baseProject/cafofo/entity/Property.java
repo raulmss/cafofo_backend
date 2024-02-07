@@ -31,13 +31,12 @@ public class Property {
     private String propertyName;
 
     @OneToMany(cascade = CascadeType.ALL)
-
     @JsonManagedReference
-    private Collection<PropImage> image = new ArrayList<>();;
+    private Collection<PropImage> image = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
-    private Collection<Offer> offers = new ArrayList<>();;
+    private Collection<Offer> offers = new ArrayList<>();
 
     @ManyToOne
     @JsonBackReference
@@ -57,7 +56,6 @@ public class Property {
     private Integer numberOfBathRoom;
 
     @Column(name = "feature")
-
     private String factAndFeatures;
 
     @Enumerated(EnumType.STRING)
