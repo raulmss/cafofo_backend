@@ -23,6 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/properties")
+@CrossOrigin(origins = "*")
 public class PropertyController {
     @Autowired
     PropertyService propertyService;

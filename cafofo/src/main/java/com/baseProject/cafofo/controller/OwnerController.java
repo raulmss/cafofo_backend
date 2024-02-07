@@ -28,6 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/owners")
+@CrossOrigin(origins = "*")
 public class OwnerController {
     @Autowired
     OwnerService ownerService;
@@ -37,7 +38,7 @@ public class OwnerController {
     @GetMapping("/{ownerid}/properties")
     @PreAuthorize("hasAuthority('OWNER')")
     public Collection<PropertyDto> getOwnerPropertiesByPlaced(@PathVariable ("ownerid") Long userId){
-        System.out.println("Owner selection");
+
         return ownerService.getOwnerPropertiesByPlaced(userId);
     }
 
@@ -63,7 +64,7 @@ public class OwnerController {
      @GetMapping("/{ownerId}/properties/{propertiesId}/offers")
      @PreAuthorize("hasAuthority('OWNER')")
      Collection<OfferDto> findOffersByPropertiesId(@PathVariable("ownerId") Long ownerId, @PathVariable("propertiesId") Long propertiesId){
-        System.out.println("inside findOffersByPropertiesId method controller");
+
         return ownerService.findOffersByPropertiesId(ownerId, propertiesId);
     }
 
@@ -73,13 +74,12 @@ public class OwnerController {
                       @PathVariable("propertiesId") Long propertiesId,
                       @PathVariable("offerId") Long offerId,
                       @RequestParam("status") String status){
-        System.out.println("STATUS: ");
-        System.out.println("inside approveOffer controller");
+
         if(status.equalsIgnoreCase(String.valueOf(OfferStatus.ACCEPTED))){
-            System.out.println("to approve");
+
             ownerService.approveOffer(ownerId,propertiesId,offerId);
         }else if(status.equalsIgnoreCase(String.valueOf(OfferStatus.REJECTED))){
-            System.out.println("to reject");
+
             ownerService.rejectOffer(ownerId,propertiesId,offerId);
         }else{
             throw new RuntimeException("status is not allowed");
@@ -97,7 +97,7 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('OWNER')")
     public PropertyDto findById(@PathVariable("ownerid") Long ownerid, @PathVariable("propid") Long propid){
-        System.out.println("Controller "+ ownerid+" " +propid);
+
         return propertyService.findAllById(ownerid,propid);
     }
     @PostMapping("/{ownerid}/upload")
@@ -105,10 +105,10 @@ public class OwnerController {
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<List<String>> uploadFiles(Long ownerid, @RequestParam("files") List<MultipartFile> multipartFiles){
         List<String> filenames = new ArrayList<>();
-        System.out.println("before path");
+
         // Create a Path object for the directory
         Path directory = Paths.get("C:/PropertyPhoto/");
-        System.out.println("file uploadFiles method"+ directory);
+
         try{
             // Create directory if it does not exist
             if (!Files.exists(directory)) {
@@ -135,7 +135,7 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('OWNER')")
     public void save(Long ownerId,@RequestBody PropertyDto property){
-        System.out.println("Property Controller");
+       
         propertyService.save(property);
     }
 
