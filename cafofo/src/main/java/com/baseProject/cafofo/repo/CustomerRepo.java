@@ -23,6 +23,6 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
     @Query("UPDATE Offer o SET o.offerPrice = :price WHERE o.id = :offerId AND o.customer.id = :userId")
     void maintainOfferByPrice(double price, Long offerId, Long userId);
 
-    @Query("select o.customer.email from Offer o where o.id=:offerId and o.customer.id=:userId")
+    @Query("select o.property.owner.email from Offer o where o.id=:offerId and o.customer.id=:userId")
     String getOwnerEmail(Long offerId, Long userId);
 }
