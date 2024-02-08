@@ -112,6 +112,7 @@ public class OwnerServiceImpl implements OwnerService {
                 .orElseThrow(()->new OfferException("Offer not found with id: "+offerId));
         offer.setOfferStatus(OfferStatus.REJECTED);
         offerRepo.save(offer);
+
         emailToCustomer(offerId,offer.getCustomer().getId(),OfferStatus.REJECTED);
     }
 

@@ -25,4 +25,6 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
     @Query("select o.property.owner.email from Offer o where o.id=:offerId and o.customer.id=:userId")
     String getOwnerEmail(Long offerId, Long userId);
+
+
 }
