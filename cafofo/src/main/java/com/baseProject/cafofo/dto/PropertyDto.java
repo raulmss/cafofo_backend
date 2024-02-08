@@ -30,5 +30,6 @@ public class PropertyDto {
     private Double area;
     private Boolean approvalStatus;
     private PropertyStatus propertyStatus;
+    private Boolean isFavorite;
 
 }

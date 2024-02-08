@@ -3,13 +3,9 @@ package com.baseProject.cafofo.service.impl;
 import com.baseProject.cafofo.dto.ImageDto;
 import com.baseProject.cafofo.dto.PropertyCriteriaRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
-import com.baseProject.cafofo.entity.PropImage;
-import com.baseProject.cafofo.entity.Property;
-import com.baseProject.cafofo.entity.PropertyStatus;
+import com.baseProject.cafofo.entity.*;
 import com.baseProject.cafofo.helper.ListMapper;
-import com.baseProject.cafofo.repo.PropImageRepo;
-import com.baseProject.cafofo.repo.PropertyMinMaxSearchDao;
-import com.baseProject.cafofo.repo.PropertyRepo;
+import com.baseProject.cafofo.repo.*;
 import com.baseProject.cafofo.service.PropertyService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -34,8 +30,28 @@ public class PropertyServiceImpl implements PropertyService {
     PropImageRepo propImageRepo;
     @Autowired
     PropertyMinMaxSearchDao propertyMinMaxSearchDao;
+    @Autowired
+    CustomerRepo customerRepo;
 
-    public Collection<PropertyDto> findAll(Long ownerid){
+    public Collection<PropertyDto> findAllGuest(){
+        Collection<Property> properties = propertyRepo.findAll();
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Property property : properties) {
+            PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            if(property.getApprovalStatus() != false){
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            }
+            else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+            propertyDto.setIsFavorite(false);
+            propertyDtos.add(propertyDto);
+        }
+        return propertyDtos;
+    }
+
+    public Collection<PropertyDto> findAllPropertyByOwner(Long ownerid){
         Collection<Property> properties = propertyRepo.findAllPropertyByOwner(ownerid);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
@@ -47,17 +63,38 @@ public class PropertyServiceImpl implements PropertyService {
             else {
                 propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
             }
-
+            propertyDto.setIsFavorite(false);
+            propertyDtos.add(propertyDto);
+        }
+        return propertyDtos;
+    }
+@Transactional
+@Override
+    public Collection<PropertyDto> findAllPropertyByOwnerWithDealType(Long ownerid, DealType dealtype){
+    System.out.println("<<service>>"+dealtype);
+        Collection<Property> properties = propertyRepo.findAllPropertyByOwnerWithDealType(ownerid,dealtype);
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Property property : properties) {
+            PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            if(property.getApprovalStatus() != false){
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            }
+            else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+            propertyDto.setIsFavorite(false);
             propertyDtos.add(propertyDto);
         }
         return propertyDtos;
     }
 
-    public PropertyDto findAllById(Long ownerId,Long propertyId){
+
+    public PropertyDto findPropertyDetailByOwner(Long ownerId,Long propertyId){
         ModelMapper modelMapper = new ModelMapper();
         Property property = propertyRepo.findPropertyByOwnerEquals(ownerId,propertyId);
         PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
-        System.out.println("<<>>"+ property.getApprovalStatus());;
+
         if(property.getApprovalStatus() == false){
             propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
         }
@@ -81,7 +118,6 @@ public class PropertyServiceImpl implements PropertyService {
         ModelMapper modelMapper = new ModelMapper();
         Property property = modelMapper.map(p,Property.class);
         propertyRepo.save(property);
-
     }
 
     public void update (Long propertyId,PropertyDto p){
@@ -126,8 +162,8 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Collection<PropertyDto> findPropertyByCustomer() {
-        Collection<Property> properties = propertyRepo.findAll();
+    public Collection<PropertyDto> findPropertyByGuest() {
+        Collection<Property> properties = propertyRepo.findPropertiesByApprovalStatus();
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
@@ -138,27 +174,109 @@ public class PropertyServiceImpl implements PropertyService {
             else {
                 propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
             }
+            propertyDto.setIsFavorite(false);
 
+            propertyDtos.add(propertyDto);
+        }
+        return propertyDtos;
+    }
+    @Override
+    public Collection<PropertyDto> findPropertyByGuestWithDealType(DealType dealType) {
+        Collection<Property> properties = propertyRepo.findPropertiesByDealType(dealType);
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        for (Property property : properties) {
+            PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            if(property.getApprovalStatus() != false){
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            }
+            else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+            propertyDto.setIsFavorite(false);
             propertyDtos.add(propertyDto);
         }
         return propertyDtos;
     }
 
     @Override
-    public PropertyDto findPropertyByCustomer(Long propid) {
+    public PropertyDto findPropertyDetail(Long propId, Long cusId) {
         ModelMapper modelMapper = new ModelMapper();
-        Property property = propertyRepo.findById(propid).get();
-        PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
-        System.out.println("<<>>"+ property.getApprovalStatus());;
-        if(property.getApprovalStatus() == false){
-            propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+        Property property= propertyRepo.findById(propId).get();
+        PropertyDto propertyDto =modelMapper.map(property,PropertyDto.class);
+        Customer c = customerRepo.findById(cusId).get();
+
+        if(property != null) {
+            if (property.getApprovalStatus() != false) {
+                propertyDto.setPropertyStatus(property.getPropertyStatus());
+            } else {
+                propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+            }
+            long cus = c.getFavoriteProperties().stream().filter(f -> f.getId().equals(property.getId())).count();
+            if (cus > 0) {
+                propertyDto.setIsFavorite(true);
+            } else {
+                propertyDto.setIsFavorite(false);
+            }
         }
-        else {
-            propertyDto.setPropertyStatus(property.getPropertyStatus());
-        }
-        System.out.println("service "+ propid);
+
         return propertyDto;
     }
+
+    @Override
+    public Collection<PropertyDto> findPropertyByCustomer(Long custId) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<Property> properties = propertyRepo.findAll();
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        Customer c = customerRepo.findById(custId).get();
+        System.out.println("<<>>"+c.getId());
+        if(c != null){
+            for (Property property : properties) {
+                PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+                if(property.getApprovalStatus() != false){
+                    propertyDto.setPropertyStatus(property.getPropertyStatus());
+                }
+                else {
+                    propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+                }
+                long cus = c.getFavoriteProperties().stream().filter(f -> f.getId().equals(property.getId())).count();
+                if(cus > 0){
+                    propertyDto.setIsFavorite(true);
+                }else{
+                    propertyDto.setIsFavorite(false);
+                }
+                propertyDtos.add(propertyDto);
+            }
+        }
+        return propertyDtos;
+    }
+
+    public Collection<PropertyDto> findPropertyByCustomerByDealType(Long custId, DealType dealtype) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<Property> properties = propertyRepo.findPropertiesByDealType(dealtype);
+        Collection<PropertyDto> propertyDtos = new ArrayList<>();
+        Customer c = customerRepo.findById(custId).get();
+        if(c != null){
+            for (Property property : properties) {
+                PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+                if(property.getApprovalStatus() != false){
+                    propertyDto.setPropertyStatus(property.getPropertyStatus());
+                }
+                else {
+                    propertyDto.setPropertyStatus(PropertyStatus.INITIAL);
+                }
+                long cus = c.getFavoriteProperties().stream().filter(f -> f.getId().equals(property.getId())).count();
+                if(cus > 0){
+                    propertyDto.setIsFavorite(true);
+                }else{
+                    propertyDto.setIsFavorite(false);
+                }
+                propertyDtos.add(propertyDto);
+            }
+        }
+        return propertyDtos;
+    }
+
 
 
 }

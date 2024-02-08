@@ -1,6 +1,7 @@
 package com.baseProject.cafofo.controller;
 
 import com.baseProject.cafofo.dto.PropertyDto;
+import com.baseProject.cafofo.entity.DealType;
 import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.service.OwnerService;
 import com.baseProject.cafofo.service.PropertyService;
@@ -34,16 +35,25 @@ public class OwnerController {
     OwnerService ownerService;
     @Autowired
     PropertyService propertyService;
-
     @GetMapping("/{ownerid}/properties")
     @PreAuthorize("hasAuthority('OWNER')")
-    public Collection<PropertyDto> getOwnerPropertiesByPlaced(@PathVariable ("ownerid") Long userId){
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<PropertyDto> getOwnerProperties(@PathVariable ("ownerid") Long ownerid,
+                                                              @RequestParam(value ="dealtype", required = false) String dealtype){
 
-        return ownerService.getOwnerPropertiesByPlaced(userId);
+        //if owner, then fav icon cannot show (talk to cyrus)
+        if(dealtype == null){
+            return propertyService.findAllPropertyByOwner(ownerid);
+        }else{
+            System.out.println("<<contrller>>"+dealtype);
+            DealType dealType = DealType.valueOf(dealtype.toUpperCase());
+            return propertyService.findAllPropertyByOwnerWithDealType(ownerid, dealType);
+        }
     }
 
     @GetMapping("/{ownerid}/filter")
     @PreAuthorize("hasAuthority('OWNER')")
+    @ResponseStatus(HttpStatus.OK)
     public List<Property> searchEqualProperty(
             @PathVariable("ownerid") Long ownerid,
             @RequestParam(value ="dealtype", required = false) String dealType,
@@ -86,19 +96,12 @@ public class OwnerController {
         }
     }
 
-    @GetMapping("/{ownerid}/properities")
+    @GetMapping("/{ownerid}/properties/{propid}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('OWNER')")
-    public Collection<PropertyDto> findAll(@PathVariable("ownerid") Long ownerid){
-        return propertyService.findAll(ownerid);
-    }
+    public PropertyDto findPropertyDetailByOwner(@PathVariable("ownerid") Long ownerid, @PathVariable("propid") Long propid){
 
-    @GetMapping("/{ownerid}/properities/{propid}")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('OWNER')")
-    public PropertyDto findById(@PathVariable("ownerid") Long ownerid, @PathVariable("propid") Long propid){
-
-        return propertyService.findAllById(ownerid,propid);
+        return propertyService.findPropertyDetailByOwner(ownerid,propid);
     }
     @PostMapping("/{ownerid}/upload")
     @ResponseStatus(HttpStatus.CREATED)
@@ -135,7 +138,7 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('OWNER')")
     public void save(Long ownerId,@RequestBody PropertyDto property){
-       
+
         propertyService.save(property);
     }
 

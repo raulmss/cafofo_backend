@@ -47,7 +47,7 @@ public class OwnerServiceImpl implements OwnerService {
     OfferRepo offerRepo;
     @Autowired
     OwnerPropertySearchDao ownerPropertySearchDao;
-
+    //If Guest(anonimous),isFav is false
     @Transactional
     public Collection<PropertyDto> getOwnerPropertiesByPlaced(Long ownerId){
         Collection<PropertyDto> propertyDtoList = listMapper.mapList( ownerRepo.getOwnerPropertiesByPlaced(ownerId), new PropertyDto()) ;
@@ -106,7 +106,6 @@ public class OwnerServiceImpl implements OwnerService {
                 .orElseThrow(()->new OfferException("Offer not found with id: "+offerId));
         offer.setOfferStatus(OfferStatus.REJECTED);
         offerRepo.save(offer);
-
     }
 
 }
