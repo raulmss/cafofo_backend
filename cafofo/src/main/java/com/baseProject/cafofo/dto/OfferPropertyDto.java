@@ -1,8 +1,9 @@
 package com.baseProject.cafofo.dto;
 
-import com.baseProject.cafofo.entity.*;
+import com.baseProject.cafofo.entity.DealType;
+import com.baseProject.cafofo.entity.HomeType;
+import com.baseProject.cafofo.entity.PropertyStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,15 +11,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PropertyDto {
+@NoArgsConstructor
+public class OfferPropertyDto {
 
-    private Long id;
     private String propertyName;
-    private Collection<ImageDto> image = new ArrayList<>();
-    private Collection<OfferDto> offers= new ArrayList<>();
     private OwnerDto owner;
     private AddressDto address;
     private Double price;
@@ -30,6 +27,6 @@ public class PropertyDto {
     private Double area;
     private Boolean approvalStatus;
     private PropertyStatus propertyStatus;
-    private Boolean isFavorite;
+    private Collection<ImageDto> image= new ArrayList<>();
 
 }

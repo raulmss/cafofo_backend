@@ -36,37 +36,42 @@ public class AdminController {
         return ResponseEntity.ok(adminService.changeActiveStatus(id));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
    @GetMapping("/customers")
-    Collection<UserDto> findAllCustomers(){
+    public Collection<UserDto> findAllCustomers(){
         System.out.println("inside findAllCustomers method controller");
         return adminService.findAllCustomers();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/owners")
-    Collection<UserDto> findAllOwners(){
+    public Collection<UserDto> findAllOwners(){
         System.out.println("inside findAllOwners method controller");
         return adminService.findAllOwners();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     //change customer inactive
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/customers/{id}")
-    void updateCustomer(@PathVariable("id") Long customerId){
+    public void updateCustomer(@PathVariable("id") Long customerId){
         System.out.println("inside updateCustomer method controller");
         adminService.updateCustomer(customerId);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     //change owner inactive
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/owners/{id}")
-    void updateOwner(@PathVariable("id") Long ownerId){
+    public void updateOwner(@PathVariable("id") Long ownerId){
         System.out.println("inside updateOwner method controller");
         adminService.updateOwner(ownerId);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("approve-owner-property/{id}")
-    void approveProperty(@PathVariable("id") Long propertyId){
+    public void approveProperty(@PathVariable("id") Long propertyId){
         System.out.println("inside approveProperty method controller");
         adminService.approveProperty(propertyId);
     }

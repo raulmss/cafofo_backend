@@ -12,6 +12,10 @@ import com.baseProject.cafofo.repo.CustomerRepo;
 import com.baseProject.cafofo.repo.OfferRepo;
 import com.baseProject.cafofo.repo.PropertyRepo;
 import com.baseProject.cafofo.service.CustomerService;
+import com.baseProject.cafofo.service.EmailService;
+import jakarta.mail.MessagingException;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -47,6 +51,11 @@ public class OwnerServiceImpl implements OwnerService {
     OfferRepo offerRepo;
     @Autowired
     OwnerPropertySearchDao ownerPropertySearchDao;
+
+    @Autowired
+    EmailService emailService;
+
+    CustomerRepo customerRepo;
 
     @Transactional
     public Collection<PropertyDto> getOwnerPropertiesByPlaced(Long ownerId){
@@ -85,27 +94,49 @@ public class OwnerServiceImpl implements OwnerService {
       public Collection<OfferDto> findOffersByPropertiesId(Long ownerId, Long propertiesId){
         return listMapper.mapList(ownerRepo.findOffersByPropertiesId(ownerId,propertiesId), new OfferDto());
     }
-  
+
+      @Override
+      @Transactional
       public void approveOffer(Long ownerId, Long propertiesId, Long offerId){
-        Owner owner = ownerRepo.findById(ownerId)
-                .orElseThrow(()->new OwnerException("Owner not found with id: " + ownerId));
-        Property property= propertyRepo.findById(propertiesId)
-                .orElseThrow(()->new PropertyException("Property not found with id: "+ propertiesId));
-        Offer offer = offerRepo.findById(offerId)
-                .orElseThrow(()->new OfferException("Offer not found with id: "+offerId));
+        Offer offer = offerRepo.findById(propertiesId,offerId)
+                .orElseThrow(()->new OfferException("Offer not found with id: "+offerId+ " property id "+propertiesId));
         offer.setOfferStatus(OfferStatus.ACCEPTED);
         offerRepo.save(offer);
+        emailToCustomer(offerId,offer.getCustomer().getId(),OfferStatus.ACCEPTED);
     }
 
+    @Transactional
+    @Override
     public void rejectOffer(Long ownerId, Long propertiesId, Long offerId){
-        Owner owner = ownerRepo.findById(ownerId)
-                .orElseThrow(()->new OwnerException("Owner not found with id: " + ownerId));
-        Property property= propertyRepo.findById(propertiesId)
-                .orElseThrow(()->new PropertyException("Property not found with id: "+ propertiesId));
         Offer offer = offerRepo.findById(offerId)
                 .orElseThrow(()->new OfferException("Offer not found with id: "+offerId));
         offer.setOfferStatus(OfferStatus.REJECTED);
         offerRepo.save(offer);
+
+        emailToCustomer(offerId,offer.getCustomer().getId(),OfferStatus.REJECTED);
+    }
+
+    private void emailToCustomer(Long offerId, Long customerId, OfferStatus offerStatus){
+
+        String customerEmail=ownerRepo.getCustomerEmail(customerId);
+        Offer offer = ownerRepo.checkOffer(customerId, offerId);
+
+        System.out.println("customer email : "+customerEmail+" offerId: "+offerId);
+
+        // Send email to customer
+        String subject = "";
+        String body="";
+        if(offerStatus.equals(OfferStatus.ACCEPTED)){
+            subject = "Cafofo Offer Acceptance";
+            body = "Dear Customer, your offer (Offer Price: "+offer.getOfferPrice()+" Property ID: "+offer.getProperty().getId() +" Name; "+offer.getProperty().getPropertyName() +") has been accepted.";
+        }
+        if(offerStatus.equals(OfferStatus.REJECTED)){
+            subject = "Cafofo Offer Reject";
+            body = "Dear Customer, your offer (Offer Price: "+offer.getOfferPrice()+" Property ID: "+offer.getProperty().getId() +" Name; "+offer.getProperty().getPropertyName() +") has been rejected.";
+
+        }
+        System.out.println("email to customer");
+        emailService.sendEmail(customerEmail, subject, body);
 
     }
 

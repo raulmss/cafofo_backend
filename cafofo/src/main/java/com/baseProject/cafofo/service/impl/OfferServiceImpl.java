@@ -45,20 +45,20 @@ public class OfferServiceImpl implements OfferService {
                 .orElseThrow(()->new OfferException("Offer not found with id" + offerId)), OfferDto.class);
     }
 
-    @Transactional
-    public void save(OfferRequest offerRequest){
-        Customer customer = customerRepo.findById(offerRequest.getCustomerId())
-                .orElseThrow(()->new CustomerException("Customer not found with id"+offerRequest.getCustomerId()));
-        Property property = propertyRepo.findById(offerRequest.getPropertyId())
-                .orElseThrow(()->new PropertyException("Property not found with id" + offerRequest.getPropertyId()));
-        Offer offer = new Offer();
-        offer.setCustomer(customer);
-        offer.setOfferPrice(offerRequest.getOfferPrice());
-        offer.setOfferDate(LocalDateTime.now());
-        offer.setOfferStatus(OfferStatus.PENDING);
-        offer.setProperty(property);
-        offerRepo.save(offer);
-    }
+//    @Transactional
+//    public void save(OfferRequest offerRequest){
+//        Customer customer = customerRepo.findById(offerRequest.getCustomerId())
+//                .orElseThrow(()->new CustomerException("Customer not found with id"+offerRequest.getCustomerId()));
+//        Property property = propertyRepo.findById(offerRequest.getPropertyId())
+//                .orElseThrow(()->new PropertyException("Property not found with id" + offerRequest.getPropertyId()));
+//        Offer offer = new Offer();
+//        offer.setCustomer(customer);
+//        offer.setOfferPrice(offerRequest.getOfferPrice());
+//        offer.setOfferDate(LocalDateTime.now());
+//        offer.setOfferStatus(OfferStatus.PENDING);
+//        offer.setProperty(property);
+//        offerRepo.save(offer);
+//    }
 
     public void update(long offerId, OfferStatusRequest offerStatus){
         Offer offer = offerRepo.findById(offerId)

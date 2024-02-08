@@ -1,6 +1,5 @@
 package com.baseProject.cafofo.repo;
 
-import com.baseProject.cafofo.dto.UserDto;
 import com.baseProject.cafofo.user.Role;
 import com.baseProject.cafofo.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -32,9 +32,9 @@ values (700.0,2,2,800.0,1,3,'FOR_RENT','APARTMENT','JoJoResident',true);
 insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus)
 values (800.0,2,3,800000.0,2,3,'FOR_SALE','CONDO','Royal Oaks',true);
 insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus)
-values (900.0,2,2,800.0,3,3,'SOLD','TOWNHOUSE','Emerald Paradise',false);
+values (900.0,2,2,800.0,3,3,'SOLD','TOWNHOUSE','Emerald Paradise',true);
 insert into property (area, number_of_bathroom, number_of_bed, price, address_id, owner_id, deal_type, home_type,property_name,approvalStatus)
-values (1000.0,2,3,800000.0,4,3,'FOR_SALE','LAND','Tranquil Haven',false);
+values (1000.0,2,3,800000.0,4,3,'FOR_SALE','LAND','Tranquil Haven',true);
 insert into offer (customer_id, id, offer_date, property_id, offer_status, cancel_flag,offer_price)
 values (4,1,'2024-02-06 02:01:44.320947',1,'PENDING',true,1000.00);
 insert into offer (customer_id, id, offer_date, property_id, offer_status,cancel_flag,offer_price)
