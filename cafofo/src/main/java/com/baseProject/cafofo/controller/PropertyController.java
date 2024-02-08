@@ -92,7 +92,6 @@ public class PropertyController {
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
-
     public List<Property> searchEqualProperty(
         @RequestParam(value ="dealtype", required = false) String dealType,
         @RequestParam(value ="minprice", required = false) Double minPrice,
@@ -103,11 +102,42 @@ public class PropertyController {
         @RequestParam(value ="minarea", required = false) Double minArea,
         @RequestParam(value ="maxarea", required = false) Double maxArea,
         @RequestParam(value ="factandfactory", required = false) String factAndFactory
-    )    {
+    )  {
 
         return propertyService.searchMinMaxProperty(dealType,minPrice,maxPrice,numBed,numBath,
         homeType,minArea,maxArea,factAndFactory);
     }
+
+    @GetMapping("/filteraddressguest")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Property> searchAddressByGuest(
+            @RequestParam(value ="homenumber", required = false) String homenumber,
+            @RequestParam(value ="street", required = false) String street,
+            @RequestParam(value ="city", required = false) String city,
+            @RequestParam(value ="state", required = false) String state,
+            @RequestParam(value ="country", required = false) String country,
+            @RequestParam(value ="zip", required = false) String zip
+
+    )  {
+        return propertyService.searchAddressGuest(country,state,city,street,homenumber,zip);
+    }
+
+    @GetMapping("/filteraddresscustomer")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public Collection<PropertyDto> searchAddressByCustomer(
+            @RequestParam(value ="homenumber", required = false) String homenumber,
+            @RequestParam(value ="street", required = false) String street,
+            @RequestParam(value ="city", required = false) String city,
+            @RequestParam(value ="state", required = false) String state,
+            @RequestParam(value ="country", required = false) String country,
+            @RequestParam(value ="zip", required = false) String zip
+
+    )  {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return propertyService.searchAddressCustomer(user.getId(),country,state,city,street,homenumber,zip);
+    }
+
 
 
 

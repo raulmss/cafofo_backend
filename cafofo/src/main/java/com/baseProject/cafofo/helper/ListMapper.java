@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.modelmapper.Converter;
+import org.modelmapper.spi.MappingContext;
+import org.hibernate.collection.spi.PersistentBag;
 
 @Component
 public class ListMapper<T,E> {

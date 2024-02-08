@@ -1,6 +1,9 @@
 package com.baseProject.cafofo.dto;
 
 import com.baseProject.cafofo.entity.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,5 +34,7 @@ public class PropertyDto {
     private Boolean approvalStatus;
     private PropertyStatus propertyStatus;
     private Boolean isFavorite;
+
+
 
 }
