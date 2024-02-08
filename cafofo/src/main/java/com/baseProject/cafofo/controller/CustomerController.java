@@ -19,8 +19,9 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
-  
-   @PostMapping("/{id}/offers")
+
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+   @PostMapping("/customers/{id}/offers")
     @ResponseStatus(HttpStatus.CREATED)
     void save(@PathVariable("id") Long customerId, @RequestBody OfferRequestDto offerRequest){
         System.out.println("inside save method controller");
@@ -34,6 +35,7 @@ public class CustomerController {
     }
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("customers/{userId}/favorite-lists")
+    // @GetMapping("customers/{customerId}/favorite-lists")
     public ResponseEntity<List<FavouriteDto>> getFavorites(@PathVariable Long userId) {
         List<FavouriteDto> favorites = customerService.getFavorites(userId);
         return favorites != null ?
@@ -43,6 +45,7 @@ public class CustomerController {
 
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @DeleteMapping("customers/{userId}/favorite-lists")
+    // @DeleteMapping("customers/{customerId}/favorite-lists")
     public ResponseEntity<String> removeFromFavorites(@RequestParam Long propertyId, @PathVariable Long userId) {
         String result = customerService.removeFromFavorites(userId, propertyId);
         return new ResponseEntity<>(result, HttpStatus.OK);

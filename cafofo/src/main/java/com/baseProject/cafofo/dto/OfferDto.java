@@ -1,9 +1,6 @@
 package com.baseProject.cafofo.dto;
 
-import com.baseProject.cafofo.entity.Customer;
 import com.baseProject.cafofo.entity.OfferStatus;
-import com.baseProject.cafofo.entity.Property;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,8 @@ public class OfferDto {
     private OfferStatus offerStatus;
     private LocalDateTime offerDate;
     private Double offerPrice;
+    private OfferPropertyDto property;
+    private boolean cancel_flag;
 
 
 }
