@@ -8,6 +8,7 @@ import com.baseProject.cafofo.entity.OfferStatus;
 import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.exceptions.CafofoApplicationException;
 import com.baseProject.cafofo.exceptions.CustomerException;
+import com.baseProject.cafofo.exceptions.OfferException;
 import com.baseProject.cafofo.exceptions.PropertyException;
 import com.baseProject.cafofo.repo.CustomerRepo;
 import com.baseProject.cafofo.repo.OfferRepo;
@@ -46,6 +47,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(()->new CustomerException("Customer not found with id"+customerId));
         Property property = propertyRepository.findById(offerRequest.getPropertyId())
                 .orElseThrow(()->new PropertyException("Property not found with id" + offerRequest.getPropertyId()));
+        if(offerRepo.searchOffer(customerId,offerRequest.getPropertyId()).isPresent()){
+            throw (new OfferException("Offer is already with property id: " + offerRequest.getPropertyId()));
+        };
         Offer offer = new Offer();
         offer.setCustomer(customer);
         offer.setOfferPrice(offerRequest.getOfferPrice());
@@ -53,6 +57,10 @@ public class CustomerServiceImpl implements CustomerService {
         offer.setOfferStatus(OfferStatus.PENDING);
         offer.setProperty(property);
         offerRepo.save(offer);
+        offer=offerRepo.searchOffer(customerId,offerRequest.getPropertyId())
+                        .orElseThrow(()->new OfferException("Offer not found with propertyId "+offerRequest.getPropertyId()+" for customerId "+ customerId));
+        System.out.println("offer id: "+ offer.getId()+" customer id: "+customerId);
+        emailToOwner(offer.getId(),customerId);
     }
 
     @Override
@@ -157,14 +165,18 @@ public class CustomerServiceImpl implements CustomerService {
     private void emailToOwner(Long offerId, Long userId){
 
         // Get customer and owner email addresses
+
         String ownerEmail=customerRepository.getOwnerEmail( offerId,  userId);
+        System.out.println(ownerEmail);
         Offer offer = customerRepository.checkOffer(userId, offerId);
 
         // Send email to owner
         String ownerSubject = "New Offer Received";
         String ownerBody = "Dear Owner, a new offer(Offer Price:"+offer.getOfferPrice()+"has been received for your property.(Property ID: "+offer.getProperty().getId() +"Name;"+offer.getProperty().getPropertyName()+").";
 
+        System.out.println("email to owner");
         emailService.sendEmail(ownerEmail, ownerSubject, ownerBody);
     }
+
 
 }

@@ -15,34 +15,39 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(URLConstants.OFFER_ENDPOINTS)
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class OfferController {
 
     @Autowired
     OfferService offerService;
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     Collection<OfferDto> findAll(){
         return offerService.findAll();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CUSTOMER')")
     @GetMapping("/{id}")
     OfferDto findById(@PathVariable("id") long offerId){
         return offerService.findById(offerId);
     }
 
- //   @PreAuthorize("hasRole('CUSTOMER')")
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    void save(@RequestBody OfferRequest offerRequest){
-        System.out.println("inside save method controller");
-        offerService.save(offerRequest);
-    }
+
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping
+//    void save(@RequestBody OfferRequest offerRequest){
+//        System.out.println("inside save method controller");
+//        offerService.save(offerRequest);
+//    }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     void update(@PathVariable("id")long offerId, @RequestBody OfferStatusRequest offerStatus){
         offerService.update(offerId, offerStatus);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void delete(@PathVariable("id") long offerId){

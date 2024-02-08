@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OwnerRepo extends JpaRepository<Owner,Long> {
@@ -19,4 +20,9 @@ public interface OwnerRepo extends JpaRepository<Owner,Long> {
     @Query("select po from Owner o join o.properties p join p.offers po where o.id=:ownerId and p.id=:propertiesId")
     List<Offer> findOffersByPropertiesId(Long ownerId, Long propertiesId);
 
+    @Query("select u.email from User u where u.id=:userId")
+    String getCustomerEmail(Long userId);
+
+    @Query("select o from Offer o where o.id=:offerId and o.customer.id=:userId")
+    Offer checkOffer(Long userId, Long offerId);
 }

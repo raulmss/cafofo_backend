@@ -78,6 +78,9 @@ public class OwnerController {
         return ownerService.findOffersByPropertiesId(ownerId, propertiesId);
     }
 
+    //owner accept or reject offer
+    ///{ownerId}/properties/{propertiesId}/offers/{offerId}?status=accepted
+    ///{ownerId}/properties/{propertiesId}/offers/{offerId}?status=rejected
     @GetMapping("/{ownerId}/properties/{propertiesId}/offers/{offerId}")
     @PreAuthorize("hasAuthority('OWNER')")
     void approveOffer(@PathVariable("ownerId") Long ownerId,

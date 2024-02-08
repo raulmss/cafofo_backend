@@ -44,6 +44,7 @@ public class AuthenticationService {
                 .build();
         //Save the new user
         userRepository.save(user);
+
     }
 
     public AuthenticationResponse registerOwner(RegisterRequest request) throws UsernameAlreadyInUseException {
@@ -56,7 +57,7 @@ public class AuthenticationService {
                 owner.setLastname(request.getFirstName());
                 owner.setEmail(request.getEmail());
                 owner.setPassword(passwordEncoder.encode(request.getPassword()));
-                owner.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
+//                owner.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
                 owner.setActive(true);
                 owner.setRole(Role.OWNER);
 
@@ -82,7 +83,7 @@ public class AuthenticationService {
         customer.setLastname(request.getFirstName());
         customer.setEmail(request.getEmail());
         customer.setPassword(passwordEncoder.encode(request.getPassword()));
-        customer.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
+//        customer.setSecretAnswer(passwordEncoder.encode(request.getSecretAnswer()));
         customer.setActive(true);
         customer.setRole(Role.CUSTOMER);
 
@@ -107,7 +108,7 @@ public class AuthenticationService {
                 .lastname(request.getFirstName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
+//                .secretAnswer(passwordEncoder.encode(request.getSecretAnswer()))
                 .active(true)
                 .role(Role.ADMIN)
                 .build();
@@ -147,6 +148,7 @@ public class AuthenticationService {
         //Return the authentication response containing the JWT Token.
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole())
                 .build();
     }
 }
