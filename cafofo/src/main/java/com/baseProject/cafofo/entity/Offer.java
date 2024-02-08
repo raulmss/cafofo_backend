@@ -33,6 +33,6 @@ public class Offer {
     @JoinColumn(name = "property_id")
     private Property property;
 
-    private boolean cancel_flag;
+    private boolean cancel_flag=false;
 
 }

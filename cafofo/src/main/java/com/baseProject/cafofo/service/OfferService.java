@@ -12,7 +12,7 @@ public interface OfferService {
 
     OfferDto findById(long offerId);
 
-    void save(OfferRequest offerRequest);
+  //  void save(OfferRequest offerRequest);
 
     void update(long offerId, OfferStatusRequest offerStatus);
 
