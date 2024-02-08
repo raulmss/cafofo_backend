@@ -1,8 +1,7 @@
 package com.baseProject.cafofo.service.impl;
 
-import com.baseProject.cafofo.dto.ImageDto;
-import com.baseProject.cafofo.dto.PropertyCriteriaRequest;
-import com.baseProject.cafofo.dto.PropertyDto;
+
+import com.baseProject.cafofo.dto.*;
 import com.baseProject.cafofo.entity.*;
 import com.baseProject.cafofo.helper.ListMapper;
 import com.baseProject.cafofo.repo.*;
@@ -12,12 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 
@@ -32,11 +30,18 @@ public class PropertyServiceImpl implements PropertyService {
     PropertyMinMaxSearchDao propertyMinMaxSearchDao;
     @Autowired
     CustomerRepo customerRepo;
+    @Autowired
+    ModelMapper modelMapper;
+    @Autowired
+    PropertyAddressGuestDao propertyAddressGuestDao;
+
+    @Autowired
+    PropertyAddressOwnerDao propertyAddressOwnerDao;
 
     public Collection<PropertyDto> findAllGuest(){
         Collection<Property> properties = propertyRepo.findAll();
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
             if(property.getApprovalStatus() != false){
@@ -50,13 +55,15 @@ public class PropertyServiceImpl implements PropertyService {
         }
         return propertyDtos;
     }
-
+    @Transactional
     public Collection<PropertyDto> findAllPropertyByOwner(Long ownerid){
         Collection<Property> properties = propertyRepo.findAllPropertyByOwner(ownerid);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
+        System.out.println("modle mapper object " + properties.size());
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
+            System.out.println("Model mappert lists ");
             if(property.getApprovalStatus() != false){
                 propertyDto.setPropertyStatus(property.getPropertyStatus());
             }
@@ -74,7 +81,7 @@ public class PropertyServiceImpl implements PropertyService {
     System.out.println("<<service>>"+dealtype);
         Collection<Property> properties = propertyRepo.findAllPropertyByOwnerWithDealType(ownerid,dealtype);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
             if(property.getApprovalStatus() != false){
@@ -91,7 +98,7 @@ public class PropertyServiceImpl implements PropertyService {
 
 
     public PropertyDto findPropertyDetailByOwner(Long ownerId,Long propertyId){
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         Property property = propertyRepo.findPropertyByOwnerEquals(ownerId,propertyId);
         PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
 
@@ -101,7 +108,7 @@ public class PropertyServiceImpl implements PropertyService {
         else {
             propertyDto.setPropertyStatus(property.getPropertyStatus());
         }
-        System.out.println("service "+ propertyId);
+        propertyDto.setIsFavorite(false);
         return propertyDto;
     }
 @Transactional
@@ -115,13 +122,13 @@ public class PropertyServiceImpl implements PropertyService {
         p.setImage(imageList);
         p.setApprovalStatus(false);
 
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         Property property = modelMapper.map(p,Property.class);
         propertyRepo.save(property);
     }
 
     public void update (Long propertyId,PropertyDto p){
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         Property property =propertyRepo.findById(propertyId).get();
         if(property!= null){
             for(PropImage i: property.getImage()){
@@ -165,7 +172,7 @@ public class PropertyServiceImpl implements PropertyService {
     public Collection<PropertyDto> findPropertyByGuest() {
         Collection<Property> properties = propertyRepo.findPropertiesByApprovalStatus();
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
             if(property.getApprovalStatus() != false){
@@ -184,7 +191,7 @@ public class PropertyServiceImpl implements PropertyService {
     public Collection<PropertyDto> findPropertyByGuestWithDealType(DealType dealType) {
         Collection<Property> properties = propertyRepo.findPropertiesByDealType(dealType);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
             if(property.getApprovalStatus() != false){
@@ -199,9 +206,11 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyDtos;
     }
 
+
+
     @Override
     public PropertyDto findPropertyDetail(Long propId, Long cusId) {
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         Property property= propertyRepo.findById(propId).get();
         PropertyDto propertyDto =modelMapper.map(property,PropertyDto.class);
         Customer c = customerRepo.findById(cusId).get();
@@ -225,7 +234,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public Collection<PropertyDto> findPropertyByCustomer(Long custId) {
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         List<Property> properties = propertyRepo.findAll();
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
         Customer c = customerRepo.findById(custId).get();
@@ -252,7 +261,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     public Collection<PropertyDto> findPropertyByCustomerByDealType(Long custId, DealType dealtype) {
-        ModelMapper modelMapper = new ModelMapper();
+//        ModelMapper modelMapper = new ModelMapper();
         List<Property> properties = propertyRepo.findPropertiesByDealType(dealtype);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
         Customer c = customerRepo.findById(custId).get();
@@ -277,6 +286,59 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyDtos;
     }
 
+    @Override
+    public List<Property> searchAddressGuest(String country, String state, String city, String street, String homenumber, String zip) {
+        AddressPropertyCriterialRequest propertyCriteriaRequest = new AddressPropertyCriterialRequest();
+        propertyCriteriaRequest.setCity(city);
+        propertyCriteriaRequest.setZip(zip);
+        propertyCriteriaRequest.setStreet(street);
+        propertyCriteriaRequest.setCountry(country);
+        propertyCriteriaRequest.setNumber(homenumber);
+        propertyCriteriaRequest.setState(state);
+
+        return propertyAddressGuestDao.findAllByCriteria(propertyCriteriaRequest);
+    }
+
+    @Override
+    public Collection<PropertyDto> searchAddressCustomer(Long customerId, String country, String state, String city, String street, String homenumber, String zip) {
+        AddressPropertyCriterialRequest propertyCriteriaRequest = new AddressPropertyCriterialRequest();
+        propertyCriteriaRequest.setCity(city);
+        propertyCriteriaRequest.setZip(zip);
+        propertyCriteriaRequest.setStreet(street);
+        propertyCriteriaRequest.setCountry(country);
+        propertyCriteriaRequest.setNumber(homenumber);
+        propertyCriteriaRequest.setState(state);
+        List<Property> properties = propertyAddressGuestDao.findAllByCriteria(propertyCriteriaRequest);
+        List<PropertyDto> propertyDtos = new ArrayList<>();
+        if(properties.size() > 0){
+            for(Property p: properties){
+                Customer c = customerRepo.findById(customerId).get();
+                PropertyDto propertyDto = modelMapper.map(p, PropertyDto.class);
+                long cus = c.getFavoriteProperties().stream().filter(f -> f.getId().equals(p.getId())).count();
+                if(cus > 0){
+                    propertyDto.setIsFavorite(true);
+                }else{
+                    propertyDto.setIsFavorite(false);
+                }
+                propertyDtos.add(propertyDto);
+            }
+        }
+        return propertyDtos;
+    }
+
+    @Override
+    public List<Property> searchAddressOwner(Long ownerId, String country, String state, String city, String street, String homenumber, String zip) {
+        AddressOwnerPropertyCriterialRequest propertyCriteriaRequest = new AddressOwnerPropertyCriterialRequest();
+        propertyCriteriaRequest.setCity(city);
+        propertyCriteriaRequest.setZip(zip);
+        propertyCriteriaRequest.setStreet(street);
+        propertyCriteriaRequest.setCountry(country);
+        propertyCriteriaRequest.setNumber(homenumber);
+        propertyCriteriaRequest.setState(state);
+        propertyCriteriaRequest.setOwnerid(ownerId);
+
+        return propertyAddressOwnerDao.findAllByCriteria(propertyCriteriaRequest);
+    }
 
 
 }

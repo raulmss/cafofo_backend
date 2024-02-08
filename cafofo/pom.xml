@@ -65,7 +65,7 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.1.1</version>
 		</dependency>
-<!--	for  Moddle mapper and EMail	-->
+		<!--	for  Moddle mapper and EMail	-->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>

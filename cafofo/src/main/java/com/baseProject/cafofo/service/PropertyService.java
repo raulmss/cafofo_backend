@@ -30,4 +30,12 @@ public interface PropertyService {
     Collection<PropertyDto> findPropertyByCustomerByDealType(Long custId, DealType dealtype);
 
     Collection<PropertyDto> findPropertyByGuestWithDealType(DealType dealType);
+
+    List<Property> searchAddressGuest(String country, String state, String city, String street, String homenumber, String zip);
+
+    Collection<PropertyDto>  searchAddressCustomer(Long customerId, String country, String state, String city, String street, String homenumber, String zip);
+
+    List<Property> searchAddressOwner(Long ownerId, String country, String state, String city, String street, String homenumber, String zip);
+
 }
+

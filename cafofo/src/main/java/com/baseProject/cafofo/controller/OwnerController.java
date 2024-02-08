@@ -70,6 +70,24 @@ public class OwnerController {
         return ownerService.searchOwnerMinMaxProperty(ownerid,dealType,minPrice,maxPrice,numBed,numBath,
                 homeType,minArea,maxArea,factAndFactory);
     }
+
+    @GetMapping("/{ownerid}/filteraddress")
+    @PreAuthorize("hasAuthority('OWNER')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Property> searchPropertyByAddress(
+            @PathVariable("ownerid") Long ownerid,
+            @RequestParam(value ="homenumber", required = false) String homenumber,
+            @RequestParam(value ="street", required = false) String street,
+            @RequestParam(value ="city", required = false) String city,
+            @RequestParam(value ="state", required = false) String state,
+            @RequestParam(value ="country", required = false) String country,
+            @RequestParam(value ="zip", required = false) String zip
+    )    {
+
+        return propertyService.searchAddressOwner(ownerid,country,state,city,street,homenumber,zip);
+    }
+
+
   
      @GetMapping("/{ownerId}/properties/{propertiesId}/offers")
      @PreAuthorize("hasAuthority('OWNER')")
@@ -103,13 +121,14 @@ public class OwnerController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('OWNER')")
     public PropertyDto findPropertyDetailByOwner(@PathVariable("ownerid") Long ownerid, @PathVariable("propid") Long propid){
-
+        System.out.println("contorller owner <<>>"+ ownerid+ propid);
         return propertyService.findPropertyDetailByOwner(ownerid,propid);
     }
     @PostMapping("/{ownerid}/upload")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('OWNER')")
     public ResponseEntity<List<String>> uploadFiles(Long ownerid, @RequestParam("files") List<MultipartFile> multipartFiles){
+        System.out.println("Contorller file upload: "+ ownerid);
         List<String> filenames = new ArrayList<>();
 
         // Create a Path object for the directory
