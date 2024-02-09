@@ -13,7 +13,7 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
     @Query(value = "select o  from Offer o where o.customer.id=:userId and o.id=:offerId")
     Offer checkOffer(Long userId, Long offerId);
 
-    @Query(value = "select o  from Offer o where o.customer.id=:userId")
+    @Query(value = "select o  from Offer o where o.customer.id=:userId and o.cancel_flag= false")
     List<Offer> findOffersByCustomerId(@Param("userId") Long userId);
 
     @Modifying

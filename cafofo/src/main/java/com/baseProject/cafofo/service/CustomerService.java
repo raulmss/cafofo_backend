@@ -1,6 +1,7 @@
 package com.baseProject.cafofo.service;
 
 import com.baseProject.cafofo.dto.FavouriteDto;
+import com.baseProject.cafofo.dto.OfferListDto;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.dto.OfferRequestDto;
 
@@ -16,7 +17,7 @@ public interface CustomerService {
 
     List<FavouriteDto> getFavorites(Long userId);
 
-    List<Offer> getOffersByUser(Long userId);
+    List<OfferListDto> getOffersByUser(Long userId);
 
     String cancelOffer(Long offerId, Long userId);
 
