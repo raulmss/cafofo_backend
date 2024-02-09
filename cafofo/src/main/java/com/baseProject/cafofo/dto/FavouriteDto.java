@@ -14,6 +14,7 @@ import java.util.List;
 public class FavouriteDto {
 
     private Long id;
+    private Long propertyId;
     private String propertyName;
     private Collection<PropImage> image;
 
