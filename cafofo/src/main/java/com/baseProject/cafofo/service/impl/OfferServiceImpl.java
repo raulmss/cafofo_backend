@@ -74,4 +74,9 @@ public class OfferServiceImpl implements OfferService {
         offerRepo.save(offer);
 
     }
+
+    @Override
+    public Collection<OfferDto> findAllById(Long userId) {
+        return (Collection<OfferDto>)listMapper.mapList(offerRepo.findAllById(userId), new OfferDto());
+    }
 }

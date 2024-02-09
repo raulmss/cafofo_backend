@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void save(Long customerId, OfferRequestDto offerRequest){
+    public Long save(Long customerId, OfferRequestDto offerRequest){
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()->new CustomerException("Customer not found with id"+customerId));
         Property property = propertyRepository.findById(offerRequest.getPropertyId())
@@ -59,7 +59,8 @@ public class CustomerServiceImpl implements CustomerService {
         offer=offerRepo.searchOffer(customerId,offerRequest.getPropertyId())
                         .orElseThrow(()->new OfferException("Offer not found with propertyId "+offerRequest.getPropertyId()+" for customerId "+ customerId));
         System.out.println("offer id: "+ offer.getId()+" customer id: "+customerId);
-        emailToOwner(offer.getId(),customerId);
+       // emailToOwner(offer.getId(),customerId);
+        return offer.getId();
     }
 
     @Override
