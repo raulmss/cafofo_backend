@@ -60,7 +60,7 @@ public class PropertyServiceImpl implements PropertyService {
         Collection<Property> properties = propertyRepo.findAllPropertyByOwner(ownerid);
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
 //        ModelMapper modelMapper = new ModelMapper();
-        System.out.println("modle mapper object " + properties.size());
+
         for (Property property : properties) {
             PropertyDto propertyDto = modelMapper.map(property, PropertyDto.class);
             System.out.println("Model mappert lists ");
@@ -117,7 +117,7 @@ public class PropertyServiceImpl implements PropertyService {
         for(ImageDto i: p.getImage()){
             i.setPath("C:/PropertyPhoto/"+i.getPath());
             imageList.add(i);
-            System.out.println(i.getPath());
+
         }
         p.setImage(imageList);
         p.setApprovalStatus(false);
@@ -134,7 +134,16 @@ public class PropertyServiceImpl implements PropertyService {
             for(PropImage i: property.getImage()){
                 propImageRepo.delete(i);
             }
-            save(p);
+            Collection<ImageDto> imageList = new ArrayList<>();
+            for(ImageDto i: p.getImage()){
+                i.setPath("C:/PropertyPhoto/"+i.getPath());
+                imageList.add(i);
+
+            }
+            p.setImage(imageList);
+
+            Property propertyRequest = modelMapper.map(p,Property.class);
+            propertyRepo.save(propertyRequest);
         }
 
     }

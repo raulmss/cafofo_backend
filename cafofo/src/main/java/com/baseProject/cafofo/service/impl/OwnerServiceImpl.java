@@ -139,5 +139,9 @@ public class OwnerServiceImpl implements OwnerService {
         emailService.sendEmail(customerEmail, subject, body);
 
     }
+    @Override
+    public Owner findById(Long ownerId){
+        return ownerRepo.findById(ownerId).get();
+    }
 
 }

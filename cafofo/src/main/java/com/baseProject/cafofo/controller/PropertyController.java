@@ -1,11 +1,16 @@
 package com.baseProject.cafofo.controller;
 
+import com.baseProject.cafofo.dto.OwnerDto;
 import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.entity.DealType;
+import com.baseProject.cafofo.entity.Owner;
 import com.baseProject.cafofo.entity.Property;
+import com.baseProject.cafofo.service.OwnerService;
 import com.baseProject.cafofo.service.PropertyService;
 import com.baseProject.cafofo.user.Role;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +18,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.baseProject.cafofo.user.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +35,17 @@ import java.util.List;
 public class PropertyController {
     @Autowired
     PropertyService propertyService;
+    @Autowired
+    OwnerService ownerService;
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Value("${upload_download.directory}")
+    private String dir;
+
+    @Value("${prefixdir}")
+    private String prefix;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -86,7 +107,12 @@ public class PropertyController {
     @PreAuthorize("hasAuthority('OWNER') || hasAuthority('CUSTOMER')")
     public void update(@PathVariable ("propertyId") Long propertyId, @RequestBody PropertyDto property){
         System.out.println("Controller update");
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner owner = ownerService.findById(user.getId());
+        property.setOwner(modelMapper.map(owner, OwnerDto.class));
         propertyService.update(propertyId,property);
+
     }
 
     @GetMapping("/filter")
@@ -138,7 +164,47 @@ public class PropertyController {
         return propertyService.searchAddressCustomer(user.getId(),country,state,city,street,homenumber,zip);
     }
 
+    @PostMapping("/{ownerid}/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public ResponseEntity<List<String>> uploadFiles(Long ownerid, @RequestParam("files") List<MultipartFile> multipartFiles){
+        System.out.println("Contorller file upload: "+ ownerid);
+        List<String> filenames = new ArrayList<>();
 
+        // Create a Path object for the directory
+
+        Path directory = Paths.get(System.getProperty(this.prefix), this.dir);
+        try{
+            // Create directory if it does not exist
+            if (!Files.exists(directory)) {
+                Files.createDirectory(directory);
+            }
+            for(MultipartFile file : multipartFiles){
+                if(file.isEmpty()){
+                    System.out.println("File not found");
+                }
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                // Create a Path object for the destination file
+                Path destinationPath = Paths.get(directory.toString(), fileName);
+                // Copy file to destination
+                Files.copy(file.getInputStream(), destinationPath);
+                filenames.add(fileName);
+            }
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.ok().body(filenames);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('OWNER')")
+    public void save(@RequestBody PropertyDto property){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Owner owner = ownerService.findById(user.getId());
+        property.setOwner(modelMapper.map(owner, OwnerDto.class));
+        propertyService.save(property);
+    }
 
 
 }
