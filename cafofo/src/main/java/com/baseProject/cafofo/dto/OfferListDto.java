@@ -27,5 +27,5 @@ public class OfferListDto {
 
     private boolean cancel_flag;
 
-    private boolean isFavorited;
+    private boolean isFavorited=false;
 }

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class OfferServiceImpl implements OfferService {
@@ -73,5 +74,10 @@ public class OfferServiceImpl implements OfferService {
         offer.setOfferStatus(OfferStatus.REJECTED);
         offerRepo.save(offer);
 
+    }
+
+    @Override
+    public Collection<OfferDto> findAllById(Long userId) {
+        return (Collection<OfferDto>)listMapper.mapList(offerRepo.findAllById(userId), new OfferDto());
     }
 }

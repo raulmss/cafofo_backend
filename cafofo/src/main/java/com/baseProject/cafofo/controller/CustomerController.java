@@ -1,16 +1,19 @@
 package com.baseProject.cafofo.controller;
 
 import com.baseProject.cafofo.dto.FavouriteDto;
+import com.baseProject.cafofo.dto.OfferDto;
 import com.baseProject.cafofo.dto.OfferListDto;
 import com.baseProject.cafofo.dto.OfferRequestDto;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.service.CustomerService;
+import com.baseProject.cafofo.service.OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -20,6 +23,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final OfferService offerService;
 
     @PreAuthorize("hasAuthority('CUSTOMER')")
    @PostMapping("/customers/{id}/offers")
@@ -52,10 +56,11 @@ public class CustomerController {
 
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("customers/{userId}/offers")
-    public ResponseEntity<List<OfferListDto>> getOffersByUser(@PathVariable Long userId) {
-        List<OfferListDto> offers = customerService.getOffersByUser(userId);
-        return offers!=null ?
-                ResponseEntity.ok(offers):
+    public ResponseEntity<Collection<OfferDto>> getOffersByUser(@PathVariable Long userId) {
+       // List<OfferListDto> offers = customerService.getOffersByUser(userId);
+        Collection<OfferDto> offerDtoList= offerService.findAllById(userId);
+        return offerDtoList!=null ?
+                ResponseEntity.ok(offerDtoList):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     @PreAuthorize("hasAuthority('CUSTOMER')")

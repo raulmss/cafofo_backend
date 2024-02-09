@@ -6,6 +6,7 @@ import com.baseProject.cafofo.dto.OfferStatusRequest;
 import com.baseProject.cafofo.entity.OfferStatus;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface OfferService {
     Collection<OfferDto> findAll();
@@ -17,4 +18,6 @@ public interface OfferService {
     void update(long offerId, OfferStatusRequest offerStatus);
 
     void delete(long offerId);
+
+    Collection<OfferDto> findAllById(Long userId);
 }

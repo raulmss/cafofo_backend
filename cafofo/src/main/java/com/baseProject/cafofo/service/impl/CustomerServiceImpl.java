@@ -16,6 +16,7 @@ import com.baseProject.cafofo.service.CustomerService;
 import com.baseProject.cafofo.service.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
         offer=offerRepo.searchOffer(customerId,offerRequest.getPropertyId())
                         .orElseThrow(()->new OfferException("Offer not found with propertyId "+offerRequest.getPropertyId()+" for customerId "+ customerId));
         System.out.println("offer id: "+ offer.getId()+" customer id: "+customerId);
-        emailToOwner(offer.getId(),customerId);
+       // emailToOwner(offer.getId(),customerId);
     }
 
     @Override
@@ -127,25 +128,31 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<OfferListDto> getOffersByUser(Long userId) {
         List< Offer> offers=customerRepository.findOffersByCustomerId(userId);
-        List<OfferListDto> offerDtoList= new ArrayList<>();
-        List<FavouriteDto> favouriteDtoList = getFavorites(userId);
-        if(offers.size()<=0){
-            throw new CafofoApplicationException("There is no Offer.");
-        }
-        else{
-            for(Offer o: offers){
-                PropertyDto propertyDto= modelMapper.map(getProperty(o.getProperty().getId()),PropertyDto.class);
-                OfferListDto offerListDto= modelMapper.map(o,OfferListDto.class);
-                offerListDto.setPropertyDto(propertyDto);
-                for (FavouriteDto f: favouriteDtoList){
-                    if(f.getPropertyId().equals(o.getProperty().getId())){
-                        offerListDto.setFavorited(true);
-                    }
-                }
-                offerDtoList.add(offerListDto);
-            }
-            return offerDtoList;
-        }
+        return  null;
+//        List<OfferListDto> offerDtoList= new ArrayList<>();
+//        List<FavouriteDto> favouriteDtoList = getFavorites(userId);
+//        System.out.println("<<<<<<<<<< Offer List Dto >>>>>>"+offers.size());
+//        if(offers.size()<=0){
+//            throw new CafofoApplicationException("There is no Offer.");
+//        }
+//        else{
+//            for(Offer o: offers){
+//                PropertyOfferDto propertyOfferDto= getProperty(o.getProperty().getId());
+//                System.out.println("<<<<<<<<<<Before Offer List Dto >>>>>>"+o.getProperty().getId());
+//                PropertyDto propertyDto= modelMapper.map(getProperty(o.getProperty().getId()),PropertyDto.class);
+//                System.out.println("<<<<<<<<<< After Offer List Dto >>>>>>"+o.getProperty().getId());
+//                OfferListDto offerListDto= modelMapper.map(o,OfferListDto.class);
+//
+//                for (FavouriteDto f: favouriteDtoList){
+//                    if(f.getPropertyId().equals(o.getProperty().getId())){
+//                        offerListDto.setFavorited(true);
+//                    }
+//                offerListDto.setPropertyDto(propertyDto);
+//                }
+//                offerDtoList.add(offerListDto);
+//            }
+//            return offerDtoList;
+//        }
 
     }
 
