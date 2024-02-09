@@ -6,6 +6,7 @@ import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.service.OwnerService;
 import com.baseProject.cafofo.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,11 @@ public class OwnerController {
     OwnerService ownerService;
     @Autowired
     PropertyService propertyService;
+    @Value("${upload_download.directory}")
+    private String dir;
+
+    @Value("${prefixdir}")
+    private String prefix;
     @GetMapping("/{ownerid}/properties")
     @PreAuthorize("hasAuthority('OWNER')")
     @ResponseStatus(HttpStatus.OK)
@@ -132,8 +138,8 @@ public class OwnerController {
         List<String> filenames = new ArrayList<>();
 
         // Create a Path object for the directory
-        Path directory = Paths.get("C:/PropertyPhoto/");
 
+        Path directory = Paths.get(System.getProperty(this.prefix), this.dir);
         try{
             // Create directory if it does not exist
             if (!Files.exists(directory)) {
