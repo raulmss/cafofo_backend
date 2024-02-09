@@ -17,7 +17,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminController {
 
     private final AdminService adminService;
@@ -35,6 +35,14 @@ public class AdminController {
     public ResponseEntity<String> deactivateUser(@PathVariable long id) {
         return ResponseEntity.ok(adminService.changeActiveStatus(id));
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/users")
+    public Collection<UserDto> findAllUsers(){
+        System.out.println("inside findAllUsers method controller");
+        return adminService.findAllUsers();
+    }
+
 
     @PreAuthorize("hasAuthority('ADMIN')")
    @GetMapping("/customers")
