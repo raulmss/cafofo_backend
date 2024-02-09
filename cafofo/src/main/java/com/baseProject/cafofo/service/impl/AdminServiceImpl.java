@@ -120,5 +120,11 @@ public class AdminServiceImpl implements AdminService {
         return user.isActive()? "User is now active" : "User is now inactive";
     }
 
+    @Override
+    public Collection<UserDto> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .toList();
+    }
 
 }

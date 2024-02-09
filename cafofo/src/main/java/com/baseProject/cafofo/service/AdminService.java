@@ -24,5 +24,6 @@ public interface AdminService {
     String userChangeUserPassword(String email, String answer, String newPassword);
   
     String changeActiveStatus(long userId);
-  
+
+    Collection<UserDto> findAllUsers();
 }
