@@ -5,10 +5,12 @@ import com.baseProject.cafofo.entity.DealType;
 import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.service.OwnerService;
 import com.baseProject.cafofo.service.PropertyService;
+import com.baseProject.cafofo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.baseProject.cafofo.config.URLConstants;
 import com.baseProject.cafofo.dto.OfferDto;
@@ -19,6 +21,7 @@ import com.baseProject.cafofo.service.CustomerService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
+import com.baseProject.cafofo.user.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,19 +44,19 @@ public class OwnerController {
 
     @Value("${prefixdir}")
     private String prefix;
-    @GetMapping("/{ownerid}/properties")
+    @GetMapping("/properties")
     @PreAuthorize("hasAuthority('OWNER')")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<PropertyDto> getOwnerProperties(@PathVariable ("ownerid") Long ownerid,
-                                                              @RequestParam(value ="dealtype", required = false) String dealtype){
+    public Collection<PropertyDto> getOwnerProperties(@RequestParam(value ="dealtype", required = false) String dealtype){
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //if owner, then fav icon cannot show (talk to cyrus)
         if(dealtype == null){
-            return propertyService.findAllPropertyByOwner(ownerid);
+            return propertyService.findAllPropertyByOwner(user.getId());
         }else{
             System.out.println("<<contrller>>"+dealtype);
             DealType dealType = DealType.valueOf(dealtype.toUpperCase());
-            return propertyService.findAllPropertyByOwnerWithDealType(ownerid, dealType);
+            return propertyService.findAllPropertyByOwnerWithDealType(user.getId(), dealType);
         }
     }
 
