@@ -136,7 +136,7 @@ public class OwnerServiceImpl implements OwnerService {
 
         }
         System.out.println("email to customer");
-        emailService.sendEmail(customerEmail, subject, body);
+      //  emailService.sendEmail(customerEmail, subject, body);
 
     }
     @Override

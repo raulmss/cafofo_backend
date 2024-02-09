@@ -17,4 +17,6 @@ public interface OfferService {
     void update(long offerId, OfferStatusRequest offerStatus);
 
     void delete(long offerId);
+
+    Collection<OfferDto> findAllById(Long userId);
 }

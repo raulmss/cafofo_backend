@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CustomerService {
   
-    void save(Long customerId, OfferRequestDto offerRequest);
+    Long save(Long customerId, OfferRequestDto offerRequest);
 
     String addToFavorites(Long userId, Long propertyId);
 
