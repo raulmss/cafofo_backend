@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -24,4 +25,6 @@ public interface PropertyRepo extends JpaRepository<Property, Long> {
     public List<Property> findPropertiesByDealType(DealType dealType);
     @Query("select p from Property p where p.approvalStatus = true ")
     public List<Property> findPropertiesByApprovalStatus();
+
+    Collection<Property> findByApprovalStatus(boolean b);
 }

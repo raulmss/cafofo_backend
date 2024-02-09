@@ -22,6 +22,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/properties-to-be-approved")
+    public ResponseEntity<?> findPropertiesTOBeApproved(){
+        return ResponseEntity.ok(adminService.findPropertiesTOBeApproved());
+    }
   
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/reset-password")

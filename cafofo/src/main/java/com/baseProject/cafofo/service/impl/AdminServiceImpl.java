@@ -1,5 +1,6 @@
 package com.baseProject.cafofo.service.impl;
 
+import com.baseProject.cafofo.dto.PropertyDto;
 import com.baseProject.cafofo.dto.UserDto;
 import com.baseProject.cafofo.entity.Customer;
 import com.baseProject.cafofo.entity.Owner;
@@ -54,6 +55,13 @@ public class AdminServiceImpl implements AdminService {
 
     public Collection<UserDto> findAllOwners(){
         return listMapper.mapList(adminRepo.findByUser(Role.OWNER),new UserDto());
+    }
+
+    @Override
+    public Collection<PropertyDto> findPropertiesTOBeApproved() {
+        return propertyRepo.findByApprovalStatus(false).stream()
+                .map(property -> modelMapper.map(property, PropertyDto.class))
+                .toList();
     }
 
     //update customers inactive
