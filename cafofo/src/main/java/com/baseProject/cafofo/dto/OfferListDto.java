@@ -26,4 +26,6 @@ public class OfferListDto {
     private PropertyDto propertyDto;
 
     private boolean cancel_flag;
+
+    private boolean isFavorited;
 }

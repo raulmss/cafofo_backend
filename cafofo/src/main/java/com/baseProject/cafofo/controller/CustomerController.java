@@ -28,15 +28,14 @@ public class CustomerController {
         System.out.println("inside save method controller");
         customerService.save(customerId, offerRequest);
     }
-   // @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     @PostMapping("customers/{userId}/favorite-lists")
     public ResponseEntity<String> addToFavorites(@RequestParam Long propertyId, @PathVariable Long userId) {
         String result = customerService.addToFavorites(userId, propertyId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-   // @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("customers/{userId}/favorite-lists")
-    // @GetMapping("customers/{customerId}/favorite-lists")
     public ResponseEntity<List<FavouriteDto>> getFavorites(@PathVariable Long userId) {
         List<FavouriteDto> favorites = customerService.getFavorites(userId);
         return favorites != null ?
@@ -46,7 +45,6 @@ public class CustomerController {
 
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @DeleteMapping("customers/{userId}/favorite-lists")
-    // @DeleteMapping("customers/{customerId}/favorite-lists")
     public ResponseEntity<String> removeFromFavorites(@RequestParam Long propertyId, @PathVariable Long userId) {
         String result = customerService.removeFromFavorites(userId, propertyId);
         return new ResponseEntity<>(result, HttpStatus.OK);

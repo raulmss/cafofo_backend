@@ -106,6 +106,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             for (Property p : customer.getFavoriteProperties()) {
                 FavouriteDto favouriteDto = modelMapper.map(p, FavouriteDto.class);
+                favouriteDto.setPropertyId(p.getId());
                 favouriteDtoList.add(favouriteDto);
             }
             return favouriteDtoList;
@@ -127,6 +128,7 @@ public class CustomerServiceImpl implements CustomerService {
     public List<OfferListDto> getOffersByUser(Long userId) {
         List< Offer> offers=customerRepository.findOffersByCustomerId(userId);
         List<OfferListDto> offerDtoList= new ArrayList<>();
+        List<FavouriteDto> favouriteDtoList = getFavorites(userId);
         if(offers.size()<=0){
             throw new CafofoApplicationException("There is no Offer.");
         }
@@ -135,6 +137,11 @@ public class CustomerServiceImpl implements CustomerService {
                 PropertyDto propertyDto= modelMapper.map(getProperty(o.getProperty().getId()),PropertyDto.class);
                 OfferListDto offerListDto= modelMapper.map(o,OfferListDto.class);
                 offerListDto.setPropertyDto(propertyDto);
+                for (FavouriteDto f: favouriteDtoList){
+                    if(f.getPropertyId().equals(o.getProperty().getId())){
+                        offerListDto.setFavorited(true);
+                    }
+                }
                 offerDtoList.add(offerListDto);
             }
             return offerDtoList;
