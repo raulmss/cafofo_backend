@@ -1,14 +1,14 @@
 
-INSERT INTO public._user (id,email, firstname, lastname, password, role,active,secret_answer)
-VALUES (2,'john.doe@example.com', 'John', 'Doe', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'ADMIN',true, 'abc');
-INSERT INTO public._user (id,email, firstname, lastname, password, role,active,secret_answer)
-VALUES (3,'jane.smith@example.com', 'Jane', 'Smith', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'OWNER',true,'abc');
-INSERT INTO public._user (id,email, firstname, lastname, password, role,active,secret_answer)
-VALUES (4,'bob.jones@example.com', 'Bob', 'Jones', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'CUSTOMER',true,'abc');
-INSERT INTO public._user (id,email, firstname, lastname, password, role,active,secret_answer)
-VALUES (5,'alice.wang@example.com', 'Alice', 'Wang', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'CUSTOMER',true,'abc');
-INSERT INTO public._user (id,email, firstname, lastname, password, role,active,secret_answer)
-VALUES (6,'alice1.wang@example.com', 'Alice1', 'Wang1', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'OWNER',true,'abc');
+INSERT INTO public._user (email, firstname, lastname, password, role,active,secret_answer)
+VALUES ('john.doe@example.com', 'John', 'Doe', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'ADMIN',true, 'abc');
+INSERT INTO public._user (email, firstname, lastname, password, role,active,secret_answer)
+VALUES ('jane.smith@example.com', 'Jane', 'Smith', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'OWNER',true,'abc');
+INSERT INTO public._user (email, firstname, lastname, password, role,active,secret_answer)
+VALUES ('bob.jones@example.com', 'Bob', 'Jones', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'CUSTOMER',true,'abc');
+INSERT INTO public._user (email, firstname, lastname, password, role,active,secret_answer)
+VALUES ('alice.wang@example.com', 'Alice', 'Wang', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'CUSTOMER',true,'abc');
+INSERT INTO public._user (email, firstname, lastname, password, role,active,secret_answer)
+VALUES ('alice1.wang@example.com', 'Alice1', 'Wang1', '$2a$12$IKEQb00u5QpZMx4v5zMweu.3wrq0pS7XLCHO4yHZ.BW/yvWu1feo2', 'OWNER',true,'abc');
 insert into public.owner (id)
 values (3);
 insert into public.owner (id)

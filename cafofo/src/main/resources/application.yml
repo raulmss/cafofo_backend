@@ -19,5 +19,10 @@ spring:
     init:
       mode: always
 server:
-  port: 8383
+  port: 8080
+
+prefixdir: user.dir
+
+upload_download:
+  directory: upload_download
 
