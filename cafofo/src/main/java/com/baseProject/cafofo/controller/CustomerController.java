@@ -1,6 +1,7 @@
 package com.baseProject.cafofo.controller;
 
 import com.baseProject.cafofo.dto.FavouriteDto;
+import com.baseProject.cafofo.dto.OfferListDto;
 import com.baseProject.cafofo.dto.OfferRequestDto;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.service.CustomerService;
@@ -27,13 +28,13 @@ public class CustomerController {
         System.out.println("inside save method controller");
         customerService.save(customerId, offerRequest);
     }
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+   // @PreAuthorize("hasAuthority('CUSTOMER')")
     @PostMapping("customers/{userId}/favorite-lists")
     public ResponseEntity<String> addToFavorites(@RequestParam Long propertyId, @PathVariable Long userId) {
         String result = customerService.addToFavorites(userId, propertyId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+   // @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("customers/{userId}/favorite-lists")
     // @GetMapping("customers/{customerId}/favorite-lists")
     public ResponseEntity<List<FavouriteDto>> getFavorites(@PathVariable Long userId) {
@@ -53,8 +54,8 @@ public class CustomerController {
 
     @PreAuthorize("hasAuthority('CUSTOMER')")
     @GetMapping("customers/{userId}/offers")
-    public ResponseEntity<List<Offer>> getOffersByUser(@PathVariable Long userId) {
-        List<Offer> offers = customerService.getOffersByUser(userId);
+    public ResponseEntity<List<OfferListDto>> getOffersByUser(@PathVariable Long userId) {
+        List<OfferListDto> offers = customerService.getOffersByUser(userId);
         return offers!=null ?
                 ResponseEntity.ok(offers):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();

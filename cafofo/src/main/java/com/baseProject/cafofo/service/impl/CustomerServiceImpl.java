@@ -1,7 +1,6 @@
 package com.baseProject.cafofo.service.impl;
 
-import com.baseProject.cafofo.dto.FavouriteDto;
-import com.baseProject.cafofo.dto.OfferRequestDto;
+import com.baseProject.cafofo.dto.*;
 import com.baseProject.cafofo.entity.Customer;
 import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.entity.OfferStatus;
@@ -125,20 +124,28 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Offer> getOffersByUser(Long userId) {
+    public List<OfferListDto> getOffersByUser(Long userId) {
         List< Offer> offers=customerRepository.findOffersByCustomerId(userId);
+        List<OfferListDto> offerDtoList= new ArrayList<>();
         if(offers.size()<=0){
             throw new CafofoApplicationException("There is no Offer.");
         }
-        else
-            return offers;
+        else{
+            for(Offer o: offers){
+                PropertyDto propertyDto= modelMapper.map(getProperty(o.getProperty().getId()),PropertyDto.class);
+                OfferListDto offerListDto= modelMapper.map(o,OfferListDto.class);
+                offerListDto.setPropertyDto(propertyDto);
+                offerDtoList.add(offerListDto);
+            }
+            return offerDtoList;
+        }
+
     }
 
     @Override
     public String cancelOffer(Long offerId, Long userId) {
         offerValidation(offerId, userId);
-        //email send
-        emailToOwner(offerId, userId);
+        //emailToOwner(offerId, userId);
         customerRepository.cancelOffer(offerId, userId);
         return "Offer canceled successfully.";
     }
