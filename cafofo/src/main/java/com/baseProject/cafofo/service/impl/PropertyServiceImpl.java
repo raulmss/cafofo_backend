@@ -3,6 +3,7 @@ package com.baseProject.cafofo.service.impl;
 
 import com.baseProject.cafofo.dto.*;
 import com.baseProject.cafofo.entity.*;
+import com.baseProject.cafofo.exceptions.CafofoApplicationException;
 import com.baseProject.cafofo.helper.ListMapper;
 import com.baseProject.cafofo.repo.*;
 import com.baseProject.cafofo.service.PropertyService;
@@ -58,6 +59,9 @@ public class PropertyServiceImpl implements PropertyService {
     @Transactional
     public Collection<PropertyDto> findAllPropertyByOwner(Long ownerid){
         Collection<Property> properties = propertyRepo.findAllPropertyByOwner(ownerid);
+        if(properties==null || properties.equals(null)){
+            throw new CafofoApplicationException("There is no properties for this owner");
+        }
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
 //        ModelMapper modelMapper = new ModelMapper();
 
@@ -80,6 +84,9 @@ public class PropertyServiceImpl implements PropertyService {
     public Collection<PropertyDto> findAllPropertyByOwnerWithDealType(Long ownerid, DealType dealtype){
     System.out.println("<<service>>"+dealtype);
         Collection<Property> properties = propertyRepo.findAllPropertyByOwnerWithDealType(ownerid,dealtype);
+        if(properties==null || properties.equals(null)){
+        throw new CafofoApplicationException("There is no properties for this owner");
+            }
         Collection<PropertyDto> propertyDtos = new ArrayList<>();
 //        ModelMapper modelMapper = new ModelMapper();
         for (Property property : properties) {
@@ -100,6 +107,9 @@ public class PropertyServiceImpl implements PropertyService {
     public PropertyDto findPropertyDetailByOwner(Long ownerId,Long propertyId){
 //        ModelMapper modelMapper = new ModelMapper();
         Property property = propertyRepo.findPropertyByOwnerEquals(ownerId,propertyId);
+        if(property==null || property.equals(null)){
+            throw new CafofoApplicationException("There is no properties for this owner");
+        }
         PropertyDto propertyDto = modelMapper.map(property,PropertyDto.class);
 
         if(property.getApprovalStatus() == false){
@@ -129,7 +139,8 @@ public class PropertyServiceImpl implements PropertyService {
 
     public void update (Long propertyId,PropertyDto p){
 //        ModelMapper modelMapper = new ModelMapper();
-        Property property =propertyRepo.findById(propertyId).get();
+        Property property =propertyRepo.findById(propertyId)
+                .orElseThrow(()->new CafofoApplicationException("There is no property to update"));
         if(property!= null){
             for(PropImage i: property.getImage()){
                 propImageRepo.delete(i);
@@ -148,7 +159,8 @@ public class PropertyServiceImpl implements PropertyService {
 
     }
     public void delete(Long propertyId){
-        Property p =propertyRepo.findById(propertyId).get();
+        Property p =propertyRepo.findById(propertyId)
+                .orElseThrow(()->new CafofoApplicationException("There is no property to delete"));
         System.out.println("delete...");
         System.out.println(propertyRepo.findPropertyByOffers(propertyId) +"<<>>");
         if(p != null){
