@@ -6,6 +6,7 @@ import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.service.OwnerService;
 import com.baseProject.cafofo.service.PropertyService;
 import com.baseProject.cafofo.user.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/owners")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OwnerController {
     @Autowired
     OwnerService ownerService;
@@ -44,6 +46,9 @@ public class OwnerController {
 
     @Value("${prefixdir}")
     private String prefix;
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping("/properties")
     @PreAuthorize("hasAuthority('OWNER')")
     @ResponseStatus(HttpStatus.OK)
@@ -173,4 +178,13 @@ public class OwnerController {
         propertyService.save(property);
     }
 
+    @GetMapping("/{ownerId}/offers")
+    @PreAuthorize("hasAuthority('OWNER')")
+    Collection<OfferDto> findOfferByOwnerId(@PathVariable("ownerId") Long ownerId){
+
+        return ownerService.findOfferByOwnerId(ownerId)
+                .stream()
+                .map((element) -> modelMapper.map(element, OfferDto.class))
+                .collect(Collectors.toList());
+    }
 }
