@@ -4,10 +4,7 @@ package com.baseProject.cafofo.service.impl;
 import com.baseProject.cafofo.dto.OfferDto;
 import com.baseProject.cafofo.dto.OfferRequest;
 import com.baseProject.cafofo.entity.*;
-import com.baseProject.cafofo.exceptions.CustomerException;
-import com.baseProject.cafofo.exceptions.OfferException;
-import com.baseProject.cafofo.exceptions.OwnerException;
-import com.baseProject.cafofo.exceptions.PropertyException;
+import com.baseProject.cafofo.exceptions.*;
 import com.baseProject.cafofo.repo.CustomerRepo;
 import com.baseProject.cafofo.repo.OfferRepo;
 import com.baseProject.cafofo.repo.PropertyRepo;
@@ -59,7 +56,12 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Transactional
     public Collection<PropertyDto> getOwnerPropertiesByPlaced(Long ownerId){
-        Collection<PropertyDto> propertyDtoList = listMapper.mapList( ownerRepo.getOwnerPropertiesByPlaced(ownerId), new PropertyDto()) ;
+        Collection<Property> properties = ownerRepo.getOwnerPropertiesByPlaced(ownerId);
+        if(properties==null || properties.equals(null)){
+            throw new CafofoApplicationException("There is no properties for this owner");
+        }
+
+        Collection<PropertyDto> propertyDtoList = listMapper.mapList( properties, new PropertyDto()) ;
         return propertyDtoList;
     }
     @Transactional
@@ -92,7 +94,11 @@ public class OwnerServiceImpl implements OwnerService {
     }
   
       public Collection<OfferDto> findOffersByPropertiesId(Long ownerId, Long propertiesId){
-        return listMapper.mapList(ownerRepo.findOffersByPropertiesId(ownerId,propertiesId), new OfferDto());
+          Collection<Offer> offers = ownerRepo.findOffersByPropertiesId(ownerId,propertiesId);
+          if(offers==null || offers.equals(null)){
+              throw new CafofoApplicationException("There is no properties for this owner");
+          }
+        return listMapper.mapList(offers, new OfferDto());
     }
 
       @Override
@@ -141,7 +147,8 @@ public class OwnerServiceImpl implements OwnerService {
     }
     @Override
     public Owner findById(Long ownerId){
-        return ownerRepo.findById(ownerId).get();
+        return ownerRepo.findById(ownerId)
+                .orElseThrow(()->new CafofoApplicationException("There is no owner"));
     }
 
 }

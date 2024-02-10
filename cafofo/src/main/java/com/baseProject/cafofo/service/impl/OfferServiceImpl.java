@@ -15,9 +15,12 @@ import com.baseProject.cafofo.repo.CustomerRepo;
 import com.baseProject.cafofo.repo.OfferRepo;
 import com.baseProject.cafofo.repo.PropertyRepo;
 import com.baseProject.cafofo.service.OfferService;
+import com.baseProject.cafofo.user.Role;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,6 +39,9 @@ public class OfferServiceImpl implements OfferService {
     CustomerRepo customerRepo;
     @Autowired
     PropertyRepo propertyRepo;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public Collection<OfferDto> findAll(){
         return (Collection<OfferDto>)listMapper.mapList(offerRepo.findAll(), new OfferDto());
     }

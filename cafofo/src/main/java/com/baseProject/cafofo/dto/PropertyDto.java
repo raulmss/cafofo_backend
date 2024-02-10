@@ -1,9 +1,6 @@
 package com.baseProject.cafofo.dto;
 
 import com.baseProject.cafofo.entity.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +18,7 @@ public class PropertyDto {
     private Long id;
     private String propertyName;
     private Collection<ImageDto> image = new ArrayList<>();
-    private Collection<OfferDto> offers= new ArrayList<>();
+    private Collection<OfferResDto> offers= new ArrayList<>();
     private OwnerDto owner;
     private AddressDto address;
     private Double price;
