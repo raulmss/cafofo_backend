@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/commom")
@@ -42,7 +43,8 @@ public class CommonController {
             propertyDtos = propertyService.findPropertyByGuestWithDealType(DealType.valueOf(dealtype));
         }
 
-        return propertyDtos;
+        return propertyDtos.stream().filter(PropertyDto::getApprovalStatus).collect(Collectors.toList());
+
     }
 
     @GetMapping("properties/filter")

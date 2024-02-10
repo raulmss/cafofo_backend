@@ -95,4 +95,8 @@ public class Property {
 
         return hasPending ? PropertyStatus.PENDING : PropertyStatus.AVAILABLE;
     }
+
+    public void addOffer(Offer offer) {
+        offers.add(offer);
+    }
 }

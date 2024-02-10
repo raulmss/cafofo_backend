@@ -46,15 +46,15 @@ public class AuthenticationService {
         userRepository.save(admin);
 
         Customer customer = new Customer();
-        customer.setFirstname("Raul");
-        customer.setLastname("Souto");
-        customer.setEmail("raul@mail.com");
-        customer.setPassword(passwordEncoder.encode("1234"));
-        customer.setSecretAnswer(passwordEncoder.encode("1234"));
-        customer.setActive(true);
-        customer.setRole(Role.CUSTOMER);
+                customer.setFirstname("Raul");
+                customer.setLastname("Souto");
+                customer.setEmail("raul@mail.com");
+                customer.setPassword(passwordEncoder.encode("1234"));
+                customer.setSecretAnswer(passwordEncoder.encode("1234"));
+                customer.setActive(true);
+                customer.setRole(Role.CUSTOMER);
 
-        //Save the new customer
+        //Save the new user
         customerRepository.save(customer);
 
         Owner owner = new Owner();
@@ -65,8 +65,9 @@ public class AuthenticationService {
         owner.setSecretAnswer(passwordEncoder.encode("1234"));
         owner.setActive(true);
         owner.setRole(Role.OWNER);
-        //Save the new owner
+        //Save the new user
         ownerRepository.save(owner);
+
     }
 
     public AuthenticationResponse registerOwner(RegisterRequest request) throws UsernameAlreadyInUseException {

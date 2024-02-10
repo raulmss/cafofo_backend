@@ -55,9 +55,11 @@ public class CustomerServiceImpl implements CustomerService {
         offer.setOfferDate(LocalDateTime.now());
         offer.setOfferStatus(OfferStatus.PENDING);
         offer.setProperty(property);
-        offerRepo.save(offer);
-        offer=offerRepo.searchOffer(customerId,offerRequest.getPropertyId())
-                        .orElseThrow(()->new OfferException("Offer not found with propertyId "+offerRequest.getPropertyId()+" for customerId "+ customerId));
+//        offerRepo.save(offer);
+        property.addOffer(offer);
+        propertyRepository.save(property);
+//        offer=offerRepo.searchOffer(customerId,offerRequest.getPropertyId())
+//                        .orElseThrow(()->new OfferException("Offer not found with propertyId "+offerRequest.getPropertyId()+" for customerId "+ customerId));
         System.out.println("offer id: "+ offer.getId()+" customer id: "+customerId);
        // emailToOwner(offer.getId(),customerId);
         return offer.getId();
