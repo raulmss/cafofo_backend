@@ -33,7 +33,7 @@ public class AuthenticationService {
 
     @PostConstruct
     public void populate(){
-        var user = User.builder()
+        var admin = User.builder()
                 .firstname("Lorena")
                 .lastname("Souto")
                 .email("lorena@mail.com")
@@ -43,8 +43,30 @@ public class AuthenticationService {
                 .role(Role.ADMIN)
                 .build();
         //Save the new user
-        userRepository.save(user);
+        userRepository.save(admin);
 
+        Customer customer = new Customer();
+        customer.setFirstname("Raul");
+        customer.setLastname("Souto");
+        customer.setEmail("raul@mail.com");
+        customer.setPassword(passwordEncoder.encode("1234"));
+        customer.setSecretAnswer(passwordEncoder.encode("1234"));
+        customer.setActive(true);
+        customer.setRole(Role.CUSTOMER);
+
+        //Save the new customer
+        customerRepository.save(customer);
+
+        Owner owner = new Owner();
+        owner.setFirstname("Cyrus");
+        owner.setLastname("Shrestha");
+        owner.setEmail("cyrus@mail.com");
+        owner.setPassword(passwordEncoder.encode("1234"));
+        owner.setSecretAnswer(passwordEncoder.encode("1234"));
+        owner.setActive(true);
+        owner.setRole(Role.OWNER);
+        //Save the new owner
+        ownerRepository.save(owner);
     }
 
     public AuthenticationResponse registerOwner(RegisterRequest request) throws UsernameAlreadyInUseException {
