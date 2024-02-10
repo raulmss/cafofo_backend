@@ -4,6 +4,7 @@ package com.baseProject.cafofo.service;
 import com.baseProject.cafofo.dto.OfferDto;
 import com.baseProject.cafofo.dto.OfferRequest;
 import com.baseProject.cafofo.dto.PropertyDto;
+import com.baseProject.cafofo.entity.Offer;
 import com.baseProject.cafofo.entity.Owner;
 import com.baseProject.cafofo.entity.Property;
 import com.baseProject.cafofo.helper.ListMapper;
@@ -32,5 +33,7 @@ public interface OwnerService{
     void rejectOffer(Long ownerId, Long propertiesId, Long offerId);
 
     Owner findById (Long ownerId);
+
+    List<Offer> findOfferByOwnerId(Long ownerId);
 
 }

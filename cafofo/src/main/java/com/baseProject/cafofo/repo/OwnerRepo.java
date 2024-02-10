@@ -25,4 +25,7 @@ public interface OwnerRepo extends JpaRepository<Owner,Long> {
 
     @Query("select o from Offer o where o.id=:offerId and o.customer.id=:userId")
     Offer checkOffer(Long userId, Long offerId);
+
+    @Query("select o from Offer o join o.property p where p.owner.id=:ownerId")
+    List<Offer> findOfferByOwnerId(Long ownerId);
 }

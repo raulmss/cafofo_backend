@@ -144,4 +144,10 @@ public class OwnerServiceImpl implements OwnerService {
         return ownerRepo.findById(ownerId).get();
     }
 
+    @Override
+    public List<Offer> findOfferByOwnerId(Long ownerId) {
+        return ownerRepo.findOfferByOwnerId(ownerId);
+    }
+
+
 }
